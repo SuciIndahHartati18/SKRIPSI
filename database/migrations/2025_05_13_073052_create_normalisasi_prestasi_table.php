@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('normalisasi_prestasi', function (Blueprint $table) {
             $table->id();
-             $table->foreignIdFor(Siswa::class)->constrained('siswa')->cascadeOnDelete();
+            $table->foreignIdFor(Siswa::class)->constrained('siswa')->cascadeOnDelete();
             $table->decimal('nilai_normalisasi_prestasi', 10, 2);
             $table->timestamps();
         });

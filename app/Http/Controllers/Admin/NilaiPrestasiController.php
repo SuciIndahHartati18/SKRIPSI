@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\KriteriaPrestasi;
+use App\Models\NilaiPrestasi;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 
-class SiswaController extends Controller
+class NilaiPrestasiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +17,7 @@ class SiswaController extends Controller
      */
     public function index()
     {
-        $siswas = Siswa::latest()->simplePaginate(6);
-        return view('admin.siswa.index', [
-            'siswas' => $siswas,
-        ]);
+        //
     }
 
     /**
@@ -28,7 +27,13 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        return view('admin.siswa.create');
+        $siswas             = Siswa::latest()->get();
+        $kriteriaPrestasi   = KriteriaPrestasi::latest()->get();
+
+        return view('admin.nilai_prestasi.create', [
+            'siswas' => $siswas,
+            'kriteriaPrestasi' => $kriteriaPrestasi,
+        ]);
     }
 
     /**
@@ -39,26 +44,24 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nisn'          => ['required'],
-            'nama_siswa'    => ['required'],
-            'alamat'        => ['required'],
-            'jalur'         => ['required'],
-            'jenis_kelamin' => ['required'],
+        $valiadatedData = $request->validate([
+            'siswa_id'              => ['required', 'exists:siswa,id'],
+            'kriteria_prestasi_id'  => ['required', 'exists:kriteria_prestasi,id'],
+            'nilai_prestasi'        => ['required'],
         ]);
 
-        Siswa::create($validated);
-        
-        return redirect()->route('admin.siswa.create');
+        NilaiPrestasi::create($valiadatedData);
+
+        return redirect()->route('admin.nilai_prestasi.create');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Siswa  $siswa
+     * @param  \App\Models\NilaiPrestasi  $nilaiPrestasi
      * @return \Illuminate\Http\Response
      */
-    public function show(Siswa $siswa)
+    public function show(NilaiPrestasi $nilaiPrestasi)
     {
         //
     }
@@ -66,10 +69,10 @@ class SiswaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Siswa  $siswa
+     * @param  \App\Models\NilaiPrestasi  $nilaiPrestasi
      * @return \Illuminate\Http\Response
      */
-    public function edit(Siswa $siswa)
+    public function edit(NilaiPrestasi $nilaiPrestasi)
     {
         //
     }
@@ -78,10 +81,10 @@ class SiswaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Siswa  $siswa
+     * @param  \App\Models\NilaiPrestasi  $nilaiPrestasi
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Siswa $siswa)
+    public function update(Request $request, NilaiPrestasi $nilaiPrestasi)
     {
         //
     }
@@ -89,12 +92,11 @@ class SiswaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Siswa  $siswa
+     * @param  \App\Models\NilaiPrestasi  $nilaiPrestasi
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Siswa $siswa)
+    public function destroy(NilaiPrestasi $nilaiPrestasi)
     {
-        $siswa->delete();
-         return redirect()->route('admin.siswa.create');
+        //
     }
 }

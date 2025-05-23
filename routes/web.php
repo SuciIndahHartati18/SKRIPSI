@@ -14,16 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/dashboard', 'dashboard');
+Route::view('/dashboard', 'dashboard')->name('dashboard');
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::controller(SiswaController::class)->group(function () {
-    Route::get('/admin/siswa', 'index')->name('admin.siswa.index');
-    Route::get('/admin/siswa/create', 'create')->name('admin.siswa.create');
-    Route::post('/admin/siswa', 'store')->name('admin.siswa.store');
-
-    Route::delete('/admin/siswa/{siswa}', 'destroy')->name('admin.siswa.destroy');
-});
+require __DIR__. '/admin.php' ;

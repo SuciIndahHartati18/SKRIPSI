@@ -17,10 +17,8 @@ return new class extends Migration
     {
         Schema::create('nilai_tes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Siswa::class)
-            ->constrained('siswa')
-            ->cascadeOnDelete();
-             $table->foreignIdFor(KriteriaTes::class)->constrained('kriteria_tes')->cascadeOnDelete();
+            $table->foreignIdFor(Siswa::class)->constrained('siswa')->cascadeOnDelete();
+            $table->foreignIdFor(KriteriaTes::class)->constrained('kriteria_tes')->cascadeOnDelete();
             $table->integer('nilai_tes');
             $table->timestamps();
         });

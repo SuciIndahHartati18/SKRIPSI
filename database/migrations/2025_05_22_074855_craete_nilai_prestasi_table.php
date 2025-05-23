@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\KriteriaPrestasi;
 use App\Models\Siswa;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,9 +17,8 @@ return new class extends Migration
     {
         Schema::create('nilai_prestasi', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Siswa::class)
-            ->constrained('siswa')
-            ->cascadeOnDelete();
+            $table->foreignIdFor(Siswa::class)->constrained('siswa')->cascadeOnDelete();
+            $table->foreignIdFor(KriteriaPrestasi::class)->constrained('kriteria_prestasi')->cascadeOnDelete();
             $table->integer('nilai_prestasi');
             $table->timestamps();
         });

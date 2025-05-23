@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\KriteriaTes;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 
-class SiswaController extends Controller
+class KriteriaTesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +16,7 @@ class SiswaController extends Controller
      */
     public function index()
     {
-        $siswas = Siswa::latest()->simplePaginate(6);
-        return view('admin.siswa.index', [
-            'siswas' => $siswas,
-        ]);
+        //
     }
 
     /**
@@ -28,7 +26,11 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        return view('admin.siswa.create');
+        $siswas = Siswa::latest()->get();
+
+        return view('admin.kriteria_tes.create', [
+            'siswas' => $siswas,
+        ]);
     }
 
     /**
@@ -39,26 +41,27 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nisn'          => ['required'],
-            'nama_siswa'    => ['required'],
-            'alamat'        => ['required'],
-            'jalur'         => ['required'],
-            'jenis_kelamin' => ['required'],
+        $validatedData = $request->validate([
+            'siswa_id'              => ['required', 'exists:siswa,id'],
+            'nama_kriteria_tes'     => ['required'],
+            'tipe_kriteria_tes'     => ['required'],
+            'bobot_kriteria_tes'    => ['required'],
         ]);
 
-        Siswa::create($validated);
-        
-        return redirect()->route('admin.siswa.create');
+        $validatedData['bobot_kriteria_tes'] = number_format((float) $validatedData['bobot_kriteria_tes'], 2, '.', ',');
+
+        KriteriaTes::create($validatedData);
+
+        return redirect()->route('admin.kriteria_tes.create');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Siswa  $siswa
+     * @param  \App\Models\KriteriaTes  $kriteriaTes
      * @return \Illuminate\Http\Response
      */
-    public function show(Siswa $siswa)
+    public function show(KriteriaTes $kriteriaTes)
     {
         //
     }
@@ -66,10 +69,10 @@ class SiswaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Siswa  $siswa
+     * @param  \App\Models\KriteriaTes  $kriteriaTes
      * @return \Illuminate\Http\Response
      */
-    public function edit(Siswa $siswa)
+    public function edit(KriteriaTes $kriteriaTes)
     {
         //
     }
@@ -78,10 +81,10 @@ class SiswaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Siswa  $siswa
+     * @param  \App\Models\KriteriaTes  $kriteriaTes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Siswa $siswa)
+    public function update(Request $request, KriteriaTes $kriteriaTes)
     {
         //
     }
@@ -89,12 +92,11 @@ class SiswaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Siswa  $siswa
+     * @param  \App\Models\KriteriaTes  $kriteriaTes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Siswa $siswa)
+    public function destroy(KriteriaTes $kriteriaTes)
     {
-        $siswa->delete();
-         return redirect()->route('admin.siswa.create');
+        //
     }
 }

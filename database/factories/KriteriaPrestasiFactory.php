@@ -20,7 +20,7 @@ class KriteriaPrestasiFactory extends Factory
         return [
             'siswa_id' => Siswa::factory(),
             'nama_kriteria_prestasi' => fake()->randomElement(['akademik', 'non akademik']),
-            'tipe_kriteria_prestasi' => fake()->randomElement(['Ada', 'Tidak Ada-ada']),
+            'tipe_kriteria_prestasi' => fake()->randomElement(['Ada', 'Tidak ada']),
             'bobot_kriteria_prestasi' => fake()->randomFloat(2, 0, 1000),
         ];
     }

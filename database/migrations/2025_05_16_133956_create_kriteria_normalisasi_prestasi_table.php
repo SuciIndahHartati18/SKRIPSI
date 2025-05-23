@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create('kriteria_normalisasi_prestasi', function (Blueprint $table) {
             $table->id();
-             $table->foreignIdFor(KriteriaPrestasi::class)->constrained('kriteria_prestasi')->cascadeOnDelete();
+            $table->foreignIdFor(KriteriaPrestasi::class)->constrained('kriteria_prestasi')->cascadeOnDelete();
             $table->foreignIdFor(NormalisasiPrestasi::class)->constrained('normalisasi_prestasi')->cascadeOnDelete();
             $table->timestamps();
         });

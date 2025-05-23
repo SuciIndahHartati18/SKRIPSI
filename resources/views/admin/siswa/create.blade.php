@@ -1,28 +1,48 @@
 <x-layout>
-    <form action="{{ route('admin.siswa.store') }}" method="post">
-        @csrf
-        <div class="flex flex-col justify-start">
-            <label for="nisn">nisn</label>
-            <input type="text" name="nisn" id="nisn" placeholder="nisn..."  class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
 
-            <label for="nama_siswa">nama siswa</label>
-            <input type="text" name="nama_siswa" id="nama_siswa" placeholder="nama_siswa..." class="bg-slate-100 border">
+    <x-form.form action="{{ route('admin.siswa.store') }}">
+        <x-form.container variant="label-input">
+            <x-form.label for="nisn">NISN</x-form.label>
+            <x-form.input type="text" name="nisn" id="nisn" :value="old('nisn')" placeholder="NISN..." />
+            <x-form.error errorFor="nisn" />
+        </x-form.container>
 
-            <label for="alamat">alamat</label>
-            <textarea name="alamat" id="alamat" placeholder="Alamat..." rows="4" class="bg-slate-100 border resize-none"></textarea>
+        <x-form.container variant="label-input">
+            <x-form.label for="nama_siswa">Nama Siswa</x-form.label>
+            <x-form.input type="text" name="nama_siswa" id="nama_siswa" :value="old('nama_siswa')" placeholder="Nama siswa..."/>
+            <x-form.error errorFor="nama_siswa" />
+        </x-form.container>
 
-            <label for="jalur">jalur</label>
-           <select name="jalur" id="jalur" class="bg-slate-100 border">
-            <option value="Prestasi">Prestasi</option>
-            <option value="Tes">Tes</option>
-           </select>
+        <x-form.container variant="label-input">
+            <x-form.label for="alamat">Alamat</x-form.label>
+            <x-form.textarea name="alamat" id="alamat" placeholder="Alamat">
+                {{ old('alamat') }}
+            </x-form.textarea>
+            <x-form.error errorFor="alamat" />
+        </x-form.container>
 
-            <label for="jenis_kelamin">jenis kelamin</label>
-            <select name="jenis_kelamin" id="jenis_kelamin" class="bg-slate-100 border">
-                <option value="Laki-laki">Laki-laki</option>
-                <option value="Perempuan">Perempuan</option>
-            </select>
-            <button type="submit" class="bg-blue-500 w-fit text-white px-3 py-1">Simpan</button>
-        </div>
-    </form>
+        <x-form.container variant="label-input">
+            <x-form.label for="jalur">Jalur</x-form.label>
+            <x-form.select name="jalur" id="jalur">
+                <option value="Prestasi" {{ old('jalur') === 'Prestasi' ? 'selected' : '' }}>Prestasi</option>
+                <option value="Tes" {{ old('jalur') === 'Tes' ? 'selected' : '' }}>Tes</option>
+            </x-form.select>
+            <x-form.error errorFor="jalur" />
+        </x-form.container>
+
+        <x-form.container variant="label-input">
+            <x-form.label for="jenis_kelamin">Jenis Kelamin</x-form.label>
+            <x-form.select name="jenis_kelamin" id="jenis_kelamin">
+                <option value="Laki-laki" {{ old('jenis_kelamin') === 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                <option value="Perempuan" {{ old('jenis_kelamin') === 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+            </x-form.select>
+            <x-form.error errorFor="jenis_kelamin" />
+        </x-form.container>
+
+        <x-form.container variant="button">
+            <a href="{{ route('dashboard') }}" class="inline-block bg-red-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-red-600">Batal</a>
+            <button type="submit" class="bg-blue-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-blue-600">Simpan</button>
+        </x-form.container>
+    </x-form.form>
+
 </x-layout>
