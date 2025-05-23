@@ -40,8 +40,10 @@ Route::prefix('admin/')->group(function () {
         Route::get('/nilai-prestasi', 'index')->name('admin.nilai_prestasi.index');
         Route::get('/nilai-prestasi/create', 'create')->name('admin.nilai_prestasi.create');
         Route::post('/nilai-prestasi', 'store')->name('admin.nilai_prestasi.store');
-    
+        
+        // Route::get('/kriteria-prestasi/{siswaId}', 'getKriteriaPrestasi');
         Route::delete('/nilai-prestasi/{nilaiPrestasi}', 'destroy')->name('admin.nilai_prestasi.destroy');
+
     });
 
     Route::controller(NilaiTesController::class)->group(function () {

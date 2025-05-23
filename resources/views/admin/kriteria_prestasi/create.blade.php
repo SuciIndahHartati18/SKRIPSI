@@ -18,8 +18,12 @@
         <x-form.container variant="label-input">
             <x-form.label for="nama_kriteria_prestasi">Nama Kriteria Prestasi</x-form.label>
             <x-form.select name="nama_kriteria_prestasi" id="nama_kriteria_prestasi">
-                <option value="akademik" {{ old('nama_kriteria_prestasi') === 'akademik' ? 'selected' : '' }}>Akademik</option>
-                <option value="non akademic" {{ old('nama_kriteria_prestasi') === 'non akademic' ? 'selected' : '' }}>Non akademic</option>
+                <option value="Matematika" {{ old('nama_kriteria_tes') === 'Matematika' ? 'selected' : '' }}>Matematika</option>
+                <option value="Bahasa Indonesia" {{ old('nama_kriteria_tes') === 'Bahasa Indonesia' ? 'selected' : '' }}>Bahasa Indonesia</option>
+                <option value="Ilmu Pengetahuan Alam" {{ old('nama_kriteria_tes') === 'Ilmu Pengetahuan Alam' ? 'selected' : '' }}>Ilmu Pengetahuan Alam</option>
+                <option value="Ilmu Pengetahuan Sosial" {{ old('nama_kriteria_tes') === 'Ilmu Pengetahuan Sosial' ? 'selected' : '' }}>Ilmu Pengetahuan Sosial</option>
+                <option value="Pendidikan Agama Islam" {{ old('nama_kriteria_tes') === 'Pendidikan Agama Islam' ? 'selected' : '' }}>Pendidikan Agama Islam</option>
+                <option value="Pendidikan Kewarnegaraan" {{ old('nama_kriteria_tes') === 'Pendidikan Kewarnegaraan' ? 'selected' : '' }}>Pendidikan Kewarnegaraan</option>
             </x-form.select>
             <x-form.error errorFor="nama_kriteria_prestasi" />
         </x-form.container>

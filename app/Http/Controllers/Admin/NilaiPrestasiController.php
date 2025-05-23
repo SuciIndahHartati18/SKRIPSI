@@ -25,14 +25,22 @@ class NilaiPrestasiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $siswas             = Siswa::latest()->get();
-        $kriteriaPrestasi   = KriteriaPrestasi::latest()->get();
+        $selectedSiswa = $request->input('siswa_id');
+        $kriteriaPrestasi = [];
+        // $kriteriaPrestasi   = KriteriaPrestasi::latest()->get();
+
+        if ($selectedSiswa) {
+            $siswa = Siswa::with('kriteriaPrestasi')->find($selectedSiswa);
+            $kriteriaPrestasi = $siswa?->kriteriaPrestasi ?? [];
+        }
 
         return view('admin.nilai_prestasi.create', [
             'siswas' => $siswas,
             'kriteriaPrestasi' => $kriteriaPrestasi,
+            'selectedSiswa' => $selectedSiswa,
         ]);
     }
 
@@ -99,4 +107,20 @@ class NilaiPrestasiController extends Controller
     {
         //
     }
+
+    // public function getKriteriaPrestasi($siswaId)
+    // {
+    //     $kriteriaPrestasi = KriteriaPrestasi::where('siswa_id', $siswaId)->get();
+    //     return response()->json($kriteriaPrestasi);
+    // }
+
+    // public function getKriteriaPrestasi(Siswa $siswa)
+    // {
+    //     try {
+    //         $kriteria = $siswa->kriteriaPrestasi()->select('id', 'nama_kriteria')->get();
+    //         return response()->json($kriteria);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => 'Terjadi kesalahan server'], 500);
+    //     }
+    // }
 }
