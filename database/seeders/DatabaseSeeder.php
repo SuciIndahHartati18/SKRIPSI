@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\KriteriaPrestasi;
 use App\Models\KriteriaTes;
 use App\Models\NormalisasiTes;
+use App\Models\Siswa;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -24,28 +25,11 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-
-        KriteriaPrestasi::factory()->create([
-            'nama_kriteria_prestasi'    => 'Matematika',
-            'tipe_kriteria_prestasi'    => 'benefit',
-            'bobot_kriteria_prestasi'   => '0.3',
-
-            'nama_kriteria_prestasi'    => 'Bahasa Indonesia',
-            'tipe_kriteria_prestasi'    => 'benefit',
-            'bobot_kriteria_prestasi'   => '0.2',
-
-            'nama_kriteria_prestasi'    => 'Ilmu Pengetahuan Alam',
-            'tipe_kriteria_prestasi'    => 'benefit',
-            'bobot_kriteria_prestasi'   => '0.15',
+        
+        $this->call([
+            SiswaSeeder::class,
+            KriteriaPrestasiSeeder::class,
+            KriteriaTesSeeder::class,
         ]);
-
-        // Buat 5 kriteria
-        // $kriterias = KriteriaTes::factory()->count(5)->create();
-
-        // NormalisasiTes::factory()->count(3)->create()->each(function ($normalisasi) use ($kriterias) {
-        //     $normalisasi->kriteriaTes()->attach(
-        //         $kriterias->random(rand(2, 4))->pluck('id')->toArray()
-        //     );
-        // });
     }
 }

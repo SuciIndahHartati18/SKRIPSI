@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\KriteriaTes;
-use App\Models\NormalisasiTes;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kriteria_tes_normalisasi_tes', function (Blueprint $table) {
+        Schema::create('kriteria_tes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(KriteriaTes::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(NormalisasiTes::class)->constrained()->cascadeOnDelete();
+            $table->string('nama_kriteria_tes');
+            $table->string('tipe_kriteria_tes');
+            $table->float('bobot_kriteria_tes', 8, 2);
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kriteria_tes_normalisasi_tes');
+        Schema::dropIfExists('kriteria_tes');
     }
 };

@@ -28,7 +28,7 @@ class NilaiTesController extends Controller
     public function create()
     {
         $siswas     = Siswa::latest()->get();
-        $kriteriaTes= KriteriaTes::latest()->get();
+        $kriteriaTes= KriteriaTes::all();
 
         return view('admin.nilai_tes.create', [
             'siswas'        => $siswas,
@@ -44,13 +44,27 @@ class NilaiTesController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $valiadatedData = $request->validate([
             'siswa_id'          => ['required', 'exists:siswa,id'],
-            'kriteria_tes_id'   => ['required', 'exists:kriteria_tes,id'],
-            'nilai_tes'         => ['required'],
+            'kriteria_tes_id'   => ['required', 'array'],
+            'kriteria_tes_id.*' => ['required', 'exists:kriteria_tes,id'],
+            'nilai_tes'         => ['required', 'array'],
+            'nilai_tes.*'       => ['required', 'numeric'],
         ]);
 
-        NilaiTes::create($validatedData);
+        foreach ($valiadatedData['kriteria_tes_id'] as $index => $kriteriaId) {
+            $kriteria   = KriteriaTes::find($kriteriaId);
+            $nilaiAsli  = $valiadatedData['nilai_tes'][$index];
+
+            // Konversi nilai
+            $nilaiKonversi = $this->rantingKecocokan($kriteria->nama_kriteria_tes, $nilaiAsli);
+
+            NilaiTes::create([
+                'siswa_id'          => $valiadatedData['siswa_id'],
+                'kriteria_tes_id'   => $kriteriaId,
+                'nilai_tes'         => $nilaiKonversi,
+            ]);
+        }
 
         return redirect()->route('admin.nilai_tes.create');
     }
@@ -98,5 +112,31 @@ class NilaiTesController extends Controller
     public function destroy(NilaiTes $nilaiTes)
     {
         //
+    }
+
+    private function rantingKecocokan($kriteriaNama, $nilaiAsli)
+    {
+        if ($kriteriaNama === 'Mengaji') {
+            if ($nilaiAsli <= 70) return 2;
+            elseif ($nilaiAsli <= 80) return 3;
+            elseif ($nilaiAsli <= 90) return 4;
+            else return 5;
+        }
+
+        if ($kriteriaNama === 'Wawancara') {
+            if ($nilaiAsli <= 60) return 2;
+            elseif ($nilaiAsli <= 75) return 3;
+            elseif ($nilaiAsli <= 85) return 4;
+            else return 5;
+        }
+
+        if ($kriteriaNama === 'Psikotes') {
+            if ($nilaiAsli <= 65) return 2;
+            elseif ($nilaiAsli <= 75) return 3;
+            elseif ($nilaiAsli <= 85) return 4;
+            else return 5;
+        }
+
+        return $nilaiAsli;
     }
 }
