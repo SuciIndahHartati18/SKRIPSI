@@ -16,9 +16,7 @@ return new class extends Migration
     {
         Schema::create('hasil_seleksi_tes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Siswa::class)
-                ->constrained('siswa')
-                ->cascadeOnDelete();
+            $table->foreignIdFor(Siswa::class)->constrained('siswa')->cascadeOnDelete();
             $table->decimal('nilai_akhir_tes', 10, 2);
             $table->string('status_prestasi');
             $table->timestamps();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\KriteriaTes;
+use App\Models\NilaiTes;
 use App\Models\NormalisasiTes;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
@@ -26,14 +27,27 @@ class NormalisasiTesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $siswas     = Siswa::latest()->get();
-        $kriteriaTes= KriteriaTes::latest()->get();
+        $siswas         = Siswa::latest()->get();
+        $selectedSiswa  = null;
+        $nilaiTes       = collect();
+        $kriteriaTes    = KriteriaTes::latest()->get();
 
-        return view('admin.normalisasi_tes.create',[
-            'siswas'        => $siswas,
-            'kriteriaTes'   => $kriteriaTes,
+        if ($request->has('siswa_id')) {
+            $selectedSiswa = Siswa::find($request->siswa_id);
+
+            if ($selectedSiswa) {
+                $nilaiTes = NilaiTes::where('siswa_id', $selectedSiswa->id)
+                    ->with('kriteriaTes')->get()->keyBy('kriteria_tes_id');
+            }
+        }
+
+        return view('admin.normalisasi_Tes.create', [
+            'siswas'                => $siswas,
+            'selectedSiswa'         => $selectedSiswa,
+            'nilaiTes'         => $nilaiTes,
+            'kriteriaTes'      => $kriteriaTes,
         ]);
     }
 
@@ -46,24 +60,40 @@ class NormalisasiTesController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'siswa_id'              => ['required', 'exists:siswa,id'],
-            'nilai_normalisasi_tes' => ['required', 'numeric'],
-            'kriteria_tes_id'       => ['nullable', 'array'],
-            'kriteria_tes_id.*'     => ['exists:kriteria_tes,id'],
+            'siswa_id'                  => ['required', 'exists:siswa,id'],
+            'nilai_normalisasi_tes'     => ['required', 'array'],
+            'nilai_normalisasi_tes.*'   => ['nullable', 'numeric'],
         ]);
 
-        $validatedData['nilai_normalisasi_tes'] = number_format((float) $validatedData['nilai_normalisasi_tes'], 2, '.', '');
+        $siswaId = $validatedData['siswa_id'];
 
-        DB::transaction(function () use ($validatedData) {
-            $normalisasi = NormalisasiTes::create([
-                'siswa_id'              => $validatedData['siswa_id'],
-                'nilai_normalisasi_tes' => $validatedData['nilai_normalisasi_tes'],
-            ]);
+        DB::beginTransaction();
+        try {
+            foreach ($validatedData['nilai_normalisasi_tes'] as $kriteriaId => $nilaiSiswa) {
+                if ($nilaiSiswa === null) continue;
 
-            $normalisasi->kriteriaTes()->attach($validatedData['kriteria_tes_id']);
-        });
+                $maxNilai = NilaiTes::where('kriteria_tes_id', $kriteriaId)->max('nilai_tes');
 
-        return redirect()->route('admin.normalisasi_tes.create');
+                if ($maxNilai == 0) {
+                    $normalisasi = 0;
+                } else {
+                    $normalisasi = $nilaiSiswa / $maxNilai;
+                }
+
+                NormalisasiTes::updateOrCreate([
+                    'siswa_id'          => $siswaId,
+                    'kriteria_tes_id'   => $kriteriaId,
+                ], [
+                    'nilai_normalisasi_tes' => $normalisasi,
+                ]);
+            }
+            
+            DB::commit();
+            return redirect()->route('admin.normalisasi_tes.create');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('admin.normalisasi_tes.create');
+        }
     }
 
     /**

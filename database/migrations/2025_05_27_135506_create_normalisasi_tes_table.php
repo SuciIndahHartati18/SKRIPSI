@@ -18,6 +18,7 @@ return new class extends Migration
         Schema::create('normalisasi_tes', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Siswa::class)->constrained('siswa')->cascadeOnDelete();
+            $table->foreignIdFor(KriteriaTes::class)->constrained('kriteria_tes')->cascadeOnDelete();
             $table->decimal('nilai_normalisasi_tes', 10, 2);
             $table->timestamps();
         });

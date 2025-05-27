@@ -19,7 +19,6 @@ class NormalisasiTes extends Model
 
   public function kriteriaTes()
   {
-    return  $this->belongsToMany(KriteriaTes::class);
-    // return  $this->belongsToMany(KriteriaTes::class, 'kriteria_tes_normalisasi_tes');
+    return  $this->belongsTo(KriteriaTes::class);
   }
 }
