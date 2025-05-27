@@ -1,4 +1,7 @@
-<x-layout>
+<x-layout-dashboard>
+    <x-slot:heading>
+        Nilai Prestasi
+    </x-slot:heading>
 
     <div class="bg-slate-200 flex flex-col px-4 py-4 gap-3 shadow shadow-slate-500">
         <form method="GET" action="{{ route('admin.hasil_seleksi_prestasi.create') }}">
@@ -38,4 +41,4 @@
         @endif
     </div>
 
-</x-layout>
+</x-layout-dashboard>

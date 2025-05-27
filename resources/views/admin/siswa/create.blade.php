@@ -1,4 +1,7 @@
-<x-layout>
+<x-layout-dashboard>
+    <x-slot:heading>
+        Siswa
+    </x-slot:heading>
 
     <x-form.form action="{{ route('admin.siswa.store') }}">
         <x-form.container variant="label-input">
@@ -45,4 +48,4 @@
         </x-form.container>
     </x-form.form>
 
-</x-layout>
+</x-layout-dashboard>

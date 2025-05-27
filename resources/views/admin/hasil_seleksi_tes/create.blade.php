@@ -1,4 +1,7 @@
-<x-layout>
+<x-layout-dashboard>
+    <x-slot:heading>
+        Hasil Tes
+    </x-slot:heading>
 
     <x-form.form action="{{ route('admin.hasil_seleksi_tes.store') }}">
         <x-form.container variant="label-input">
@@ -36,4 +39,4 @@
         </x-form.container>
     </x-form.form>
 
-</x-layout>
+</x-layout-dashboard>

@@ -1,4 +1,7 @@
-<x-layout>
+<x-layout-dashboard>
+    <x-slot:heading>
+        Kriteria Prestasi
+    </x-slot:heading>
 
     <x-form.form action="{{ route('admin.kriteria_prestasi.store') }}">
         <x-form.container variant="label-input">
@@ -49,4 +52,4 @@
         </x-form.container>
     </x-form.form>
 
-</x-layout>
+</x-layout-dashboard>

@@ -1,4 +1,8 @@
-<x-layout>
+<x-layout-dashboard>
+    <x-slot:heading>
+        Nilai Prestasi
+    </x-slot:heading>
+
     <x-form.form action="{{ route('admin.nilai_prestasi.store') }}">
         <x-form.container variant="label-input">
             <x-form.label for="siswa">Siswa</x-form.label>
@@ -29,4 +33,4 @@
                 class="bg-blue-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-blue-600">Simpan</button>
         </x-form.container>
     </x-form.form>
-</x-layout>
+</x-layout-dashboard>
