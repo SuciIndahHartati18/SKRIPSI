@@ -1,6 +1,6 @@
 <x-layout-dashboard>
     <x-slot:heading>
-        Normaslisasi Prestasi
+        Normaslisasi Tes
     </x-slot:heading>
 
     <div class="bg-slate-200 flex flex-col px-4 py-4 gap-3 shadow shadow-slate-500">
@@ -38,7 +38,7 @@
                 </div>
 
                 <x-form.container variant="button">
-                    <a href="{{ route('admin.perhitungan_jalur_prestasi.index') }}" class="inline-block bg-red-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-red-600">Batal</a>
+                    <a href="{{ route('admin.perhitungan_jalur_tes.index') }}" class="inline-block bg-red-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-red-600">Batal</a>
                     <button type="submit" class="bg-blue-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-blue-600">Simpan</button>
                 </x-form.container>
             </form>

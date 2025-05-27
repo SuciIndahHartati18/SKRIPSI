@@ -1,6 +1,6 @@
 <x-layout-dashboard>
     <x-slot:heading>
-        KRITERIA PRESTASI
+        Kriteria Tes
     </x-slot:heading>
 
     <x-table.container variant="heading">

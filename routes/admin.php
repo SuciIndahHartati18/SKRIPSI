@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\NormalisasiTesController;
 
 use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\PerhitunganJalurPrestasiController;
+use App\Http\Controllers\PerhitunganJalurTesController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin/')->group(function () {
@@ -49,6 +50,10 @@ Route::prefix('admin/')->group(function () {
 
     Route::controller(PerhitunganJalurPrestasiController::class)->group(function () {
         Route::get('/perhitungan-jalur-prestasi', 'index')->name('admin.perhitungan_jalur_prestasi.index');
+    });
+
+    Route::controller(PerhitunganJalurTesController::class)->group(function () {
+        Route::get('/perhitungan-jalur-tes', 'index')->name('admin.perhitungan_jalur_tes.index');
     });
 
     Route::controller(HasilSeleksiPrestasiController::class)->group(function () {

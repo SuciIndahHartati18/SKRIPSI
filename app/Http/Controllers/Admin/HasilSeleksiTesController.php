@@ -80,7 +80,7 @@ class HasilSeleksiTesController extends Controller
             'nilai_akhir_tes'   => $nilaiAkhir,
         ]);
 
-        return redirect()->route('admin.hasil_seleksi_tes.create');
+        return redirect()->route('admin.perhitungan_jalur_tes.index');
     }
 
     /**

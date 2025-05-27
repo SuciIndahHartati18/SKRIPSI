@@ -1,6 +1,6 @@
 <x-layout-dashboard>
     <x-slot:heading>
-        Nilai Prestasi
+        Hasil Seleksi Prestasi
     </x-slot:heading>
 
     <div class="bg-slate-200 flex flex-col px-4 py-4 gap-3 shadow shadow-slate-500">

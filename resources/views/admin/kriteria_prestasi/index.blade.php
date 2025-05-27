@@ -1,6 +1,6 @@
 <x-layout-dashboard>
     <x-slot:heading>
-        KRITERIA PRESTASI
+        Kriteria Prestasi
     </x-slot:heading>
 
     <x-table.container variant="heading">

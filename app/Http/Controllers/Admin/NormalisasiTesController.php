@@ -89,10 +89,10 @@ class NormalisasiTesController extends Controller
             }
             
             DB::commit();
-            return redirect()->route('admin.normalisasi_tes.create');
+            return redirect()->route('admin.perhitungan_jalur_tes.index');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('admin.normalisasi_tes.create');
+            return redirect()->route('admin.perhitungan_jalur_tes.index');
         }
     }
 

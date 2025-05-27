@@ -1,6 +1,6 @@
 <x-layout-dashboard>
     <x-slot:heading>
-        PERHITUNGAN SAW JALUR PRESTASI
+        Perhitungan SAW Jalur Prestasi
     </x-slot:heading>
 
     <!-- Nilai Prestasi -->

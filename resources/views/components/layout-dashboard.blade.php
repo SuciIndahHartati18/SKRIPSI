@@ -19,12 +19,9 @@
                 <x-nav-bar.link href="{{ route('dashboard') }}">Dashboard</x-nav-bar.link>
                 <x-nav-bar.link href="{{ route('admin.siswa.index') }}">Siswa</x-nav-bar.link>
                 <x-nav-bar.link href="{{ route('admin.kriteria_prestasi.index') }}">Kriteria Prestasi</x-nav-bar.link>
-                <x-nav-bar.link href="{{ route('admin.kriteria_tes.create') }}">Kriteria Tes</x-nav-bar.link>
+                <x-nav-bar.link href="{{ route('admin.kriteria_tes.index') }}">Kriteria Tes</x-nav-bar.link>
                 <x-nav-bar.link href="{{ route('admin.perhitungan_jalur_prestasi.index') }}">Perhitungan Prestasi</x-nav-bar.link>
-
-                <x-nav-bar.link href="{{ route('admin.nilai_tes.create') }}">Nilai Tes</x-nav-bar.link>
-                <x-nav-bar.link href="{{ route('admin.normalisasi_tes.create') }}">Normalisasi Tes</x-nav-bar.link>
-                <x-nav-bar.link href="{{ route('admin.hasil_seleksi_tes.create') }}">Hasil Seleksi Tes</x-nav-bar.link>
+                <x-nav-bar.link href="{{ route('admin.perhitungan_jalur_tes.index') }}">Perhitungan Tes</x-nav-bar.link>
             </nav>
         </aside>
 
