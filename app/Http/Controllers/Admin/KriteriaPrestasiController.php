@@ -16,7 +16,11 @@ class KriteriaPrestasiController extends Controller
      */
     public function index()
     {
-        //
+        $kriteriaPrestasi = KriteriaPrestasi::latest()->simplePaginate(6);
+
+        return view('admin.kriteria_prestasi.index', [
+            'kriteriaPrestasi' => $kriteriaPrestasi,
+        ]);
     }
 
     /**
@@ -42,7 +46,6 @@ class KriteriaPrestasiController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'siswa_id'                  => ['required', 'exists:siswa,id'],
             'nama_kriteria_prestasi'    => ['required'],
             'tipe_kriteria_prestasi'    => ['required'],
             'bobot_kriteria_prestasi'   => ['required', 'numeric'],
@@ -52,7 +55,7 @@ class KriteriaPrestasiController extends Controller
 
         KriteriaPrestasi::create($validatedData);
 
-        return redirect()->route('admin.kriteria_prestasi.create');
+        return redirect()->route('admin.kriteria_prestasi.index');
     }
 
     /**
@@ -74,7 +77,9 @@ class KriteriaPrestasiController extends Controller
      */
     public function edit(KriteriaPrestasi $kriteriaPrestasi)
     {
-        //
+        return view('admin.kriteria_prestasi.edit', [
+            'kriteriaPrestasi' => $kriteriaPrestasi,
+        ]);
     }
 
     /**
@@ -86,7 +91,17 @@ class KriteriaPrestasiController extends Controller
      */
     public function update(Request $request, KriteriaPrestasi $kriteriaPrestasi)
     {
-        //
+        $validatedData = $request->validate([
+            'nama_kriteria_prestasi'    => ['required'],
+            'tipe_kriteria_prestasi'    => ['required'],
+            'bobot_kriteria_prestasi'   => ['required', 'numeric'],
+        ]);
+
+        $validatedData['bobot_kriteria_prestasi'] = number_format((float) $validatedData['bobot_kriteria_prestasi'], 2, '.', ',');
+
+        $kriteriaPrestasi->update($validatedData);
+
+        return redirect()->route('admin.kriteria_prestasi.index');
     }
 
     /**
@@ -97,6 +112,21 @@ class KriteriaPrestasiController extends Controller
      */
     public function destroy(KriteriaPrestasi $kriteriaPrestasi)
     {
-        //
+        $kriteriaPrestasi->delete();
+
+        return redirect()->route('admin.kriteria_prestasi.index');
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+
+        $kriteriaPrestasi = KriteriaPrestasi::when($search, function ($query, $search) {
+                return $query->where('nama_kriteria_prestasi', 'like', '%' . $search . '%');
+        })->simplePaginate(6);
+
+        return view('admin.kriteria_prestasi.index', [
+            'kriteriaPrestasi' => $kriteriaPrestasi,
+        ]);
     }
 }

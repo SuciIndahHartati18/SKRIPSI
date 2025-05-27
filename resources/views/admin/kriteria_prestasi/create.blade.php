@@ -5,20 +5,6 @@
 
     <x-form.form action="{{ route('admin.kriteria_prestasi.store') }}">
         <x-form.container variant="label-input">
-            <x-form.label for="siswa">Siswa</x-form.label>
-            <x-form.select name="siswa_id" id="siswa_id">
-                <option value="">Pilih Siswa</option>
-                @foreach ($siswas as $siswa)
-                    <option value="{{ $siswa->id }}"
-                        {{ old('siswa_id') === $siswa->id ? 'selected' : '' }}>
-                        {{ $siswa->nama_siswa }}
-                    </option>
-                @endforeach
-            </x-form.select>
-            <x-form.error errorFor="siswa_id" />
-        </x-form.container>
-
-        <x-form.container variant="label-input">
             <x-form.label for="nama_kriteria_prestasi">Nama Kriteria Prestasi</x-form.label>
             <x-form.select name="nama_kriteria_prestasi" id="nama_kriteria_prestasi">
                 <option value="Matematika" {{ old('nama_kriteria_tes') === 'Matematika' ? 'selected' : '' }}>Matematika</option>
@@ -34,8 +20,8 @@
         <x-form.container variant="label-input">
             <x-form.label for="tipe_kriteria_prestasi">Tipe Kriteria Prestasi</x-form.label>
             <x-form.select name="tipe_kriteria_prestasi" id="tipe_kriteria_prestasi">
-                <option value="Tidak ada" {{ old('tipe_kriteria_prestasi') === 'Tidak ada' ? 'selected' : '' }}>Tidak ada</option>
-                <option value="Ada" {{ old('tipe_kriteria_prestasi') === 'Ada' ? 'selected' : '' }}>Ada</option>
+                <option value="benefit" {{ old('tipe_kriteria_prestasi') === 'Tidak ada' ? 'selected' : '' }}>Benefit</option>
+                <option value="cost" {{ old('tipe_kriteria_prestasi') === 'Ada' ? 'selected' : '' }}>Cost</option>
             </x-form.select>
             <x-form.error errorFor="tipe_kriteria_prestasi" />
         </x-form.container>
@@ -47,7 +33,7 @@
         </x-form.container>
 
         <x-form.container variant="button">
-            <a href="{{ route('dashboard') }}" class="inline-block bg-red-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-red-600">Batal</a>
+            <a href="{{ route('admin.kriteria_prestasi.index') }}" class="inline-block bg-red-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-red-600">Batal</a>
             <button type="submit" class="bg-blue-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-blue-600">Simpan</button>
         </x-form.container>
     </x-form.form>

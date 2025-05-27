@@ -71,7 +71,10 @@ Route::prefix('admin/')->group(function () {
         Route::get('/kriteria-prestasi', 'index')->name('admin.kriteria_prestasi.index');
         Route::get('/kriteria-prestasi/create', 'create')->name('admin.kriteria_prestasi.create');
         Route::post('/kriteria-prestasi', 'store')->name('admin.kriteria_prestasi.store');
+        Route::get('/kriteria-prestasi/search', 'search')->name('admin.kriteria_prestasi.search');
     
+        Route::get('/kriteria-prestasi/{kriteriaPrestasi}/edit', 'edit')->name('admin.kriteria_prestasi.edit');
+        Route::post('/kriteria-prestasi/{kriteriaPrestasi}', 'update')->name('admin.kriteria_prestasi.update');
         Route::delete('/kriteria-prestasi/{kriteriaPrestasi}', 'destroy')->name('admin.kriteria_prestasi.destroy');
     });
 
