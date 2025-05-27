@@ -29,7 +29,7 @@ class NormalisasiPrestasiController extends Controller
      */
     public function create(Request $request)
     {
-        $siswas             = Siswa::latest()->get();
+        $siswas             = Siswa::has('nilaiPrestasi')->latest()->get();
         $selectedSiswa      = null;
         $nilaiPrestasi      = collect();
         $kriteriaPrestasi   = KriteriaPrestasi::latest()->get();
@@ -38,8 +38,8 @@ class NormalisasiPrestasiController extends Controller
             $selectedSiswa = Siswa::find($request->siswa_id);
 
             if ($selectedSiswa) {
-                $nilaiPrestasi = NilaiPrestasi::where('siswa_id', $selectedSiswa->id)
-                    ->with('kriteriaPrestasi')->get()->keyBy('kriteria_prestasi_id');
+                $nilaiPrestasi = NilaiPrestasi::with('kriteriaPrestasi')
+                    ->where('siswa_id', $selectedSiswa->id)->get()->keyBy('kriteria_prestasi_id');
             }
         }
 

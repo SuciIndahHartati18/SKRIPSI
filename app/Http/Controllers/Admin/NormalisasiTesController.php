@@ -29,7 +29,7 @@ class NormalisasiTesController extends Controller
      */
     public function create(Request $request)
     {
-        $siswas         = Siswa::latest()->get();
+        $siswas         = Siswa::has('nilaiTes')->latest()->get();
         $selectedSiswa  = null;
         $nilaiTes       = collect();
         $kriteriaTes    = KriteriaTes::latest()->get();

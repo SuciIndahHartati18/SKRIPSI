@@ -66,7 +66,7 @@ class NilaiTesController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.nilai_tes.create');
+        return redirect()->route('admin.perhitungan_jalur_tes.index');
     }
 
     /**
