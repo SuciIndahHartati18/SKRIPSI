@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HasilSeleksiTes;
+use App\Models\NormalisasiTes;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 
@@ -24,12 +25,26 @@ class HasilSeleksiTesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $siswas = Siswa::latest()->get();
+        $siswas = Siswa::has('normalisasiTes')->latest()->get();
+
+        $selectedSiswa  = null;
+        $normalisasiTes = [];
+
+        if ($request->filled('siswa_id')) {
+            $selectedSiswa = Siswa::find($request->siswa_id);
+
+            if ($selectedSiswa) {
+                $normalisasiTes = NormalisasiTes::with('kriteriaTes')
+                    ->where('siswa_id', $selectedSiswa->id)->get();
+            }
+        }
 
         return view('admin.hasil_seleksi_tes.create', [
-            'siswas' => $siswas,
+            'siswas'            => $siswas,
+            'selectedSiswa'     => $selectedSiswa,
+            'normalisasiTes'    => $normalisasiTes,
         ]);
     }
 
@@ -43,11 +58,27 @@ class HasilSeleksiTesController extends Controller
     {
         $validatedData = $request->validate([
             'siswa_id'          => ['required', 'exists:siswa,id'],
-            'nilai_akhir_tes'   => ['required', 'numeric'],
-            'status_prestasi'   => ['required'],
         ]);
 
-        HasilSeleksiTes::create($validatedData);
+        $normalisasiTes = NormalisasiTes::with('kriteriaTes')
+            ->where('siswa_id', $request->siswa_id)->get();
+
+        // if ($normalisasiTes->isEmpty()) {
+        //     return back()->with('error', 'Normalisasi prestasi untuk siswa ini tidak tersedia!');
+        // }
+
+        // Hitung nilai Akhir dengan SAW
+        $nilaiAkhir = 0;
+        foreach ($normalisasiTes as $normalisasi) {
+            $nilai      = $normalisasi->nilai_normalisasi_tes;
+            $bobot      = $normalisasi->kriteriaTes->bobot_kriteria_tes;
+            $nilaiAkhir += $nilai * $bobot;
+        }
+
+        HasilSeleksiTes::updateOrCreate([
+            'siswa_id'          => $request->siswa_id,
+            'nilai_akhir_tes'   => $nilaiAkhir,
+        ]);
 
         return redirect()->route('admin.hasil_seleksi_tes.create');
     }
