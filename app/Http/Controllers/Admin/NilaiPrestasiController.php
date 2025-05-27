@@ -66,7 +66,7 @@ class NilaiPrestasiController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.nilai_prestasi.create');
+        return redirect()->route('admin.perhitungan_jalur_prestasi.index');
     }
 
     /**

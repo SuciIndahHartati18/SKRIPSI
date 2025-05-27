@@ -89,10 +89,10 @@ class NormalisasiPrestasiController extends Controller
             }
             
             DB::commit();
-            return redirect()->route('admin.normalisasi_prestasi.create');
+            return redirect()->route('admin.perhitungan_jalur_prestasi.index');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('admin.normalisasi_prestasi.create');
+            return redirect()->route('admin.perhitungan_jalur_prestasi.index');
         }
     }
 

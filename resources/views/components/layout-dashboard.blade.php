@@ -19,16 +19,12 @@
                 <x-nav-bar.link href="{{ route('dashboard') }}">Dashboard</x-nav-bar.link>
                 <x-nav-bar.link href="{{ route('admin.siswa.index') }}">Siswa</x-nav-bar.link>
                 <x-nav-bar.link href="{{ route('admin.kriteria_prestasi.index') }}">Kriteria Prestasi</x-nav-bar.link>
-
                 <x-nav-bar.link href="{{ route('admin.kriteria_tes.create') }}">Kriteria Tes</x-nav-bar.link>
+                <x-nav-bar.link href="{{ route('admin.perhitungan_jalur_prestasi.index') }}">Perhitungan Prestasi</x-nav-bar.link>
+
                 <x-nav-bar.link href="{{ route('admin.nilai_tes.create') }}">Nilai Tes</x-nav-bar.link>
                 <x-nav-bar.link href="{{ route('admin.normalisasi_tes.create') }}">Normalisasi Tes</x-nav-bar.link>
                 <x-nav-bar.link href="{{ route('admin.hasil_seleksi_tes.create') }}">Hasil Seleksi Tes</x-nav-bar.link>
-
-                <x-nav-bar.link href="{{ route('admin.kriteria_prestasi.create') }}">Kriteria Prestasi</x-nav-bar.link>
-                <x-nav-bar.link href="{{ route('admin.nilai_prestasi.create') }}">Nilai Prestasi</x-nav-bar.link>
-                <x-nav-bar.link href="{{ route('admin.normalisasi_prestasi.create') }}">Normalisasi Prestasi</x-nav-bar.link>
-                <x-nav-bar.link href="{{ route('admin.hasil_seleksi_prestasi.create') }}">Hasil Seleksi Prestasi</x-nav-bar.link>
             </nav>
         </aside>
 

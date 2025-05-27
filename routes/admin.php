@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\NilaiTesController;
 use App\Http\Controllers\Admin\NormalisasiTesController;
 
 use App\Http\Controllers\Admin\SiswaController;
+use App\Http\Controllers\PerhitunganJalurPrestasiController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin/')->group(function () {
@@ -23,6 +24,21 @@ Route::prefix('admin/')->group(function () {
         Route::get('/siswa/{siswa}/edit', 'edit')->name('admin.siswa.edit');
         Route::put('/siswa/{siswa}', 'update')->name('admin.siswa.update');
         Route::delete('/siswa/{siswa}', 'destroy')->name('admin.siswa.destroy');
+    });
+
+    Route::controller(KriteriaPrestasiController::class)->group(function () {
+        Route::get('/kriteria-prestasi', 'index')->name('admin.kriteria_prestasi.index');
+        Route::get('/kriteria-prestasi/create', 'create')->name('admin.kriteria_prestasi.create');
+        Route::post('/kriteria-prestasi', 'store')->name('admin.kriteria_prestasi.store');
+        Route::get('/kriteria-prestasi/search', 'search')->name('admin.kriteria_prestasi.search');
+    
+        Route::get('/kriteria-prestasi/{kriteriaPrestasi}/edit', 'edit')->name('admin.kriteria_prestasi.edit');
+        Route::post('/kriteria-prestasi/{kriteriaPrestasi}', 'update')->name('admin.kriteria_prestasi.update');
+        Route::delete('/kriteria-prestasi/{kriteriaPrestasi}', 'destroy')->name('admin.kriteria_prestasi.destroy');
+    });
+
+    Route::controller(PerhitunganJalurPrestasiController::class)->group(function () {
+        Route::get('/perhitungan-jalur-prestasi', 'index')->name('admin.perhitungan_jalur_prestasi.index');
     });
 
     Route::controller(HasilSeleksiPrestasiController::class)->group(function () {
@@ -65,17 +81,6 @@ Route::prefix('admin/')->group(function () {
         Route::post('/kriteria-tes', 'store')->name('admin.kriteria_tes.store');
     
         Route::delete('/kriteria-tes/{nilaiPrestasi}', 'destroy')->name('admin.kriteria_tes.destroy');
-    });
-
-    Route::controller(KriteriaPrestasiController::class)->group(function () {
-        Route::get('/kriteria-prestasi', 'index')->name('admin.kriteria_prestasi.index');
-        Route::get('/kriteria-prestasi/create', 'create')->name('admin.kriteria_prestasi.create');
-        Route::post('/kriteria-prestasi', 'store')->name('admin.kriteria_prestasi.store');
-        Route::get('/kriteria-prestasi/search', 'search')->name('admin.kriteria_prestasi.search');
-    
-        Route::get('/kriteria-prestasi/{kriteriaPrestasi}/edit', 'edit')->name('admin.kriteria_prestasi.edit');
-        Route::post('/kriteria-prestasi/{kriteriaPrestasi}', 'update')->name('admin.kriteria_prestasi.update');
-        Route::delete('/kriteria-prestasi/{kriteriaPrestasi}', 'destroy')->name('admin.kriteria_prestasi.destroy');
     });
 
     Route::controller(NormalisasiPrestasiController::class)->group(function () {
