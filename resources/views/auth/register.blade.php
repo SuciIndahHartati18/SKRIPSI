@@ -4,7 +4,9 @@
             <form method="POST" action="{{ route('register.store') }}">
                 @csrf
                 <div class="flex flex-col items-center gap-3">
-                    <span class="font-bold text-blue-500 text-2xl text-center">
+                    <img src="{{ asset('images/Logo.png') }}" alt="Logo" class="w-32 bg-cover bg-center my-2">
+
+                    <span class="font-bold text-rose-900 text-2xl text-center">
                         Selamat Datang!
                     </span>
 
@@ -33,7 +35,7 @@
                     <span></span>
         
                     <div class="w-full flex flex-col items-center gap-1">
-                        <button type="submit" class="w-1/3 bg-blue-500/80 font-bold text-slate-100 text-center text-lg px-6 py-1 rounded-sm hover:bg-blue-700">Registrasi</button>
+                        <button type="submit" class="w-1/3 bg-rose-900 font-bold text-slate-100 text-center text-lg px-6 py-1 rounded-sm hover:bg-rose-700">Registrasi</button>
                         <a href="{{ route('login') }}" class="text-blue-500 text-sm underline hover:text-blue-700">Sudah punya akun?</a>
                     </div>
                 </div>

@@ -10,19 +10,32 @@
 
 <body class="bg-slate-100">
     <div class="h-screen flex">
-        <aside class="w-64 bg-rose-900 flex flex-col items-center py-3 gap-3">
-            <span class="font-bold text-slate-100 text-3xl">LOGO'S</span>
+        <aside class="w-64 bg-rose-900 flex flex-col justify-between items-center px-3 py-3">
+            <div class="w-full flex flex-col items-center gap-3">
+                <div class="bg-slate-100 p-2 rounded-sm">
+                    <img src="{{ asset('images/Logo.png') }}" alt="Logo" class="w-32 bg-cover bg-center">
+                </div>
+    
+                <span class="w-full border border-slate-100"></span>
+    
+                <nav class="w-full flex flex-col gap-1">
+                    <x-nav-bar.link href="{{ route('dashboard') }}">Dashboard</x-nav-bar.link>
+                    <x-nav-bar.link href="{{ route('admin.siswa.index') }}">Siswa</x-nav-bar.link>
+                    <x-nav-bar.link href="{{ route('admin.kriteria_prestasi.index') }}">Kriteria Prestasi</x-nav-bar.link>
+                    <x-nav-bar.link href="{{ route('admin.kriteria_tes.index') }}">Kriteria Tes</x-nav-bar.link>
+                    <x-nav-bar.link href="{{ route('admin.perhitungan_jalur_prestasi.index') }}">Perhitungan Prestasi</x-nav-bar.link>
+                    <x-nav-bar.link href="{{ route('admin.perhitungan_jalur_tes.index') }}">Perhitungan Tes</x-nav-bar.link>
+                </nav>
+            </div>
 
-            <span class="w-full border border-slate-100"></span>
-
-            <nav class="w-full flex flex-col gap-1">
-                <x-nav-bar.link href="{{ route('dashboard') }}">Dashboard</x-nav-bar.link>
-                <x-nav-bar.link href="{{ route('admin.siswa.index') }}">Siswa</x-nav-bar.link>
-                <x-nav-bar.link href="{{ route('admin.kriteria_prestasi.index') }}">Kriteria Prestasi</x-nav-bar.link>
-                <x-nav-bar.link href="{{ route('admin.kriteria_tes.index') }}">Kriteria Tes</x-nav-bar.link>
-                <x-nav-bar.link href="{{ route('admin.perhitungan_jalur_prestasi.index') }}">Perhitungan Prestasi</x-nav-bar.link>
-                <x-nav-bar.link href="{{ route('admin.perhitungan_jalur_tes.index') }}">Perhitungan Tes</x-nav-bar.link>
-            </nav>
+            @auth
+                <div class="w-full">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full bg-slate-100 font-bold text-rose-900 text-2xl px-3 py-1 rounded-sm transition delay-50 duration-300 hover:bg-slate-300">Log Out</button>
+                    </form>
+                </div>
+            @endauth
         </aside>
 
         <main class="flex-1 overflow-auto">

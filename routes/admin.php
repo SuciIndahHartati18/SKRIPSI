@@ -15,7 +15,7 @@ use App\Http\Controllers\PerhitunganJalurPrestasiController;
 use App\Http\Controllers\PerhitunganJalurTesController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('admin/')->group(function () {
+Route::prefix('admin/')->middleware('auth')->group(function () {
     Route::controller(SiswaController::class)->group(function () {
         Route::get('/siswa', 'index')->name('admin.siswa.index');
         Route::get('/siswa/create', 'create')->name('admin.siswa.create');

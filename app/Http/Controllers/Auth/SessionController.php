@@ -55,7 +55,7 @@ class SessionController extends Controller
         request()->session()->regenerate();
 
         // Redirect
-        return redirect('/');
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -101,7 +101,7 @@ class SessionController extends Controller
     public function destroy(User $user)
     {
         Auth::logout();
-
-        return redirect('/');
+        
+        return redirect()->route('dashboard');
     }
 }

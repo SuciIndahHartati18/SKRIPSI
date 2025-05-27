@@ -4,7 +4,9 @@
             <form method="POST" action="{{ route('login.store') }}">
                 @csrf
                 <div class="flex flex-col items-center gap-3">
-                    <span class="w-1/2 font-bold text-blue-500 text-2xl text-center">
+                    <img src="{{ asset('images/Logo.png') }}" alt="Logo" class="w-32 bg-cover bg-center my-2">
+
+                    <span class="w-1/2 font-bold text-rose-900 text-2xl text-center">
                         Aplikasi Seleksi Calon Siswa Baru MTsS Jorong
                     </span>
 
@@ -29,7 +31,7 @@
                     <span></span>
         
                     <div class="w-full flex flex-col items-center gap-1">
-                        <button type="submit" class="w-1/3 bg-blue-500/80 font-bold text-slate-100 text-center text-lg px-6 py-1 rounded-sm hover:bg-blue-700">Log In</button>
+                        <button type="submit" class="w-1/3 bg-rose-900 font-bold text-slate-100 text-center text-lg px-6 py-1 rounded-sm hover:bg-rose-700">Log In</button>
                         <a href="{{ route('register') }}" class="text-blue-500 text-sm underline hover:text-blue-700">Belum punya akun?</a>
                     </div>
                 </div>
