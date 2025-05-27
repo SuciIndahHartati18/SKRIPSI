@@ -16,7 +16,11 @@ class KriteriaTesController extends Controller
      */
     public function index()
     {
-        //
+        $kriteriaTes = KriteriaTes::latest()->simplePaginate(6);
+
+        return view('admin.kriteria_tes.index', [
+            'kriteriaTes' => $kriteriaTes,
+        ]);
     }
 
     /**
@@ -26,11 +30,7 @@ class KriteriaTesController extends Controller
      */
     public function create()
     {
-        $siswas = Siswa::latest()->get();
-
-        return view('admin.kriteria_tes.create', [
-            'siswas' => $siswas,
-        ]);
+        return view('admin.kriteria_tes.create');
     }
 
     /**
@@ -42,7 +42,6 @@ class KriteriaTesController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'siswa_id'              => ['required', 'exists:siswa,id'],
             'nama_kriteria_tes'     => ['required'],
             'tipe_kriteria_tes'     => ['required'],
             'bobot_kriteria_tes'    => ['required'],
@@ -52,7 +51,7 @@ class KriteriaTesController extends Controller
 
         KriteriaTes::create($validatedData);
 
-        return redirect()->route('admin.kriteria_tes.create');
+        return redirect()->route('admin.kriteria_tes.index');
     }
 
     /**
@@ -74,7 +73,9 @@ class KriteriaTesController extends Controller
      */
     public function edit(KriteriaTes $kriteriaTes)
     {
-        //
+        return view('admin.kriteria_tes.edit', [
+            'kriteriaTes' => $kriteriaTes,
+        ]);
     }
 
     /**
@@ -86,7 +87,17 @@ class KriteriaTesController extends Controller
      */
     public function update(Request $request, KriteriaTes $kriteriaTes)
     {
-        //
+        $validatedData = $request->validate([
+            'nama_kriteria_tes'     => ['required'],
+            'tipe_kriteria_tes'     => ['required'],
+            'bobot_kriteria_tes'    => ['required'],
+        ]);
+
+        $validatedData['bobot_kriteria_tes'] = number_format((float) $validatedData['bobot_kriteria_tes'], 2, '.', ',');
+
+        $kriteriaTes->update($validatedData);
+
+        return redirect()->route('admin.kriteria_tes.index');
     }
 
     /**
@@ -97,6 +108,8 @@ class KriteriaTesController extends Controller
      */
     public function destroy(KriteriaTes $kriteriaTes)
     {
-        //
+        $kriteriaTes->delete();
+
+        return redirect()->route('admin.kriteria_tes.index');
     }
 }

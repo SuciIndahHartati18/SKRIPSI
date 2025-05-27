@@ -16,7 +16,6 @@ return new class extends Migration
     {
         Schema::create('kriteria_tes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Siswa::class)->constrained('siswa')->cascadeOnDelete();
             $table->string('nama_kriteria_tes');
             $table->string('tipe_kriteria_tes');
             $table->float('bobot_kriteria_tes', 8, 2);

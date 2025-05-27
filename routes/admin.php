@@ -37,6 +37,16 @@ Route::prefix('admin/')->group(function () {
         Route::delete('/kriteria-prestasi/{kriteriaPrestasi}', 'destroy')->name('admin.kriteria_prestasi.destroy');
     });
 
+    Route::controller(KriteriaTesController::class)->group(function () {
+        Route::get('/kriteria-tes', 'index')->name('admin.kriteria_tes.index');
+        Route::get('/kriteria-tes/create', 'create')->name('admin.kriteria_tes.create');
+        Route::post('/kriteria-tes', 'store')->name('admin.kriteria_tes.store');
+    
+        Route::get('/kriteria-tes/{kriteriaTes}/edit', 'edit')->name('admin.kriteria_tes.edit');
+        Route::put('/kriteria-tes/{kriteriaTes}', 'update')->name('admin.kriteria_tes.update');
+        Route::delete('/kriteria-tes/{kriteriaTes}', 'destroy')->name('admin.kriteria_tes.destroy');
+    });
+
     Route::controller(PerhitunganJalurPrestasiController::class)->group(function () {
         Route::get('/perhitungan-jalur-prestasi', 'index')->name('admin.perhitungan_jalur_prestasi.index');
     });
@@ -64,7 +74,6 @@ Route::prefix('admin/')->group(function () {
         
         // Route::get('/kriteria-prestasi/{siswaId}', 'getKriteriaPrestasi');
         Route::delete('/nilai-prestasi/{nilaiPrestasi}', 'destroy')->name('admin.nilai_prestasi.destroy');
-
     });
 
     Route::controller(NilaiTesController::class)->group(function () {
@@ -73,14 +82,6 @@ Route::prefix('admin/')->group(function () {
         Route::post('/nilai-tes', 'store')->name('admin.nilai_tes.store');
     
         Route::delete('/nilai-tes/{nilaiTes}', 'destroy')->name('admin.nilai_tes.destroy');
-    });
-
-    Route::controller(KriteriaTesController::class)->group(function () {
-        Route::get('/kriteria-tes', 'index')->name('admin.kriteria_tes.index');
-        Route::get('/kriteria-tes/create', 'create')->name('admin.kriteria_tes.create');
-        Route::post('/kriteria-tes', 'store')->name('admin.kriteria_tes.store');
-    
-        Route::delete('/kriteria-tes/{nilaiPrestasi}', 'destroy')->name('admin.kriteria_tes.destroy');
     });
 
     Route::controller(NormalisasiPrestasiController::class)->group(function () {

@@ -18,9 +18,8 @@ class KriteriaTesFactory extends Factory
     public function definition()
     {
         return [
-            'siswa_id' => Siswa::factory(),
-            'nama_kriteria_tes' => fake()->randomElement(['akademik', 'non akademik']),
-            'tipe_kriteria_tes' => fake()->randomElement(['Ada', 'Tidak Ada-ada']),
+            'nama_kriteria_tes' => fake()->randomElement(['Mengaji', 'Wawancara', 'Psikotes']),
+            'tipe_kriteria_tes' => fake()->randomElement(['benefit', 'cost']),
             'bobot_kriteria_tes' => fake()->randomFloat(2, 0, 1000),
         ];
     }
