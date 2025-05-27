@@ -2,7 +2,7 @@
 @php
     $container = match($variant) {
         default         => '',
-        'label-input'   => 'flex flex-col gap-1',
+        'label-input'   => 'flex items-center',
         'button'        => 'flex justify-end gap-2'
     }
 @endphp

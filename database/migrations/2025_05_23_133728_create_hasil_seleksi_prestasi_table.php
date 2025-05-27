@@ -14,12 +14,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kriteria_prestasi', function (Blueprint $table) {
+        Schema::create('hasil_seleksi_prestasi', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Siswa::class)->constrained('siswa')->cascadeOnDelete();
-            $table->string('nama_kriteria_prestasi');
-            $table->string('tipe_kriteria_prestasi');
-            $table->float('bobot_kriteria_prestasi', 8, 2);
+            $table->decimal('nilai_akhir_prestasi', 10,2);
+            $table->string('status_prestasi')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kriteria_prestasi');
+        Schema::dropIfExists('hasil_seleksi_prestasi');
     }
 };

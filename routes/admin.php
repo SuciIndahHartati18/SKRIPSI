@@ -1,13 +1,15 @@
 <?php
 
 use App\Http\Controllers\Admin\HasilSeleksiPrestasiController;
-use App\Http\Controllers\Admin\HasilSeleksiTesController;
 use App\Http\Controllers\Admin\KriteriaPrestasiController;
-use App\Http\Controllers\Admin\KriteriaTesController;
 use App\Http\Controllers\Admin\NilaiPrestasiController;
-use App\Http\Controllers\Admin\NilaiTesController;
 use App\Http\Controllers\Admin\NormalisasiPrestasiController;
+
+use App\Http\Controllers\Admin\HasilSeleksiTesController;
+use App\Http\Controllers\Admin\KriteriaTesController;
+use App\Http\Controllers\Admin\NilaiTesController;
 use App\Http\Controllers\Admin\NormalisasiTesController;
+
 use App\Http\Controllers\Admin\SiswaController;
 use Illuminate\Support\Facades\Route;
 

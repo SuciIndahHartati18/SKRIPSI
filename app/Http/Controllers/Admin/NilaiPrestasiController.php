@@ -27,20 +27,12 @@ class NilaiPrestasiController extends Controller
      */
     public function create(Request $request)
     {
-        $siswas             = Siswa::latest()->get();
-        $selectedSiswa = $request->input('siswa_id');
-        $kriteriaPrestasi = [];
-        // $kriteriaPrestasi   = KriteriaPrestasi::latest()->get();
-
-        if ($selectedSiswa) {
-            $siswa = Siswa::with('kriteriaPrestasi')->find($selectedSiswa);
-            $kriteriaPrestasi = $siswa?->kriteriaPrestasi ?? [];
-        }
+        $siswas = Siswa::latest()->get();
+        $kriteriaPrestasi   = KriteriaPrestasi::all();
 
         return view('admin.nilai_prestasi.create', [
-            'siswas' => $siswas,
-            'kriteriaPrestasi' => $kriteriaPrestasi,
-            'selectedSiswa' => $selectedSiswa,
+            'siswas'            => $siswas,
+            'kriteriaPrestasi'   => $kriteriaPrestasi,
         ]);
     }
 
@@ -54,11 +46,25 @@ class NilaiPrestasiController extends Controller
     {
         $valiadatedData = $request->validate([
             'siswa_id'              => ['required', 'exists:siswa,id'],
-            'kriteria_prestasi_id'  => ['required', 'exists:kriteria_prestasi,id'],
-            'nilai_prestasi'        => ['required'],
+            'kriteria_prestasi_id'  => ['required', 'array'],
+            'kriteria_prestasi_id.*'=> ['required', 'exists:kriteria_prestasi,id'],
+            'nilai_prestasi'        => ['required', 'array'],
+            'nilai_prestasi.*'      => ['required', 'numeric'],
         ]);
 
-        NilaiPrestasi::create($valiadatedData);
+        foreach ($valiadatedData['kriteria_prestasi_id'] as $index => $kriteriaId) {
+            $kriteria   = KriteriaPrestasi::find($kriteriaId);
+            $nilaiAsli  = $valiadatedData['nilai_prestasi'][$index];
+
+            // Konversi nilai
+            $nilaiKonversi = $this->rantingKecocokan($kriteria->nama_kriteria_prestasi, $nilaiAsli);
+
+            NilaiPrestasi::create([
+                'siswa_id'              => $valiadatedData['siswa_id'],
+                'kriteria_prestasi_id'  => $kriteriaId,
+                'nilai_prestasi'        => $nilaiKonversi,
+            ]);
+        }
 
         return redirect()->route('admin.nilai_prestasi.create');
     }
@@ -107,20 +113,51 @@ class NilaiPrestasiController extends Controller
     {
         //
     }
+    
+    private function rantingKecocokan($kriteriaNama, $nilaiAsli)
+    {
+        if ($kriteriaNama === 'Matematika') {
+            if ($nilaiAsli <= 60) return 2;
+            elseif ($nilaiAsli <= 75) return 3;
+            elseif ($nilaiAsli <= 85) return 4;
+            else return 5;
+        }
 
-    // public function getKriteriaPrestasi($siswaId)
-    // {
-    //     $kriteriaPrestasi = KriteriaPrestasi::where('siswa_id', $siswaId)->get();
-    //     return response()->json($kriteriaPrestasi);
-    // }
+        if ($kriteriaNama === 'Bahasa Indonesia') {
+            if ($nilaiAsli <= 70) return 2;
+            elseif ($nilaiAsli <= 80) return 3;
+            elseif ($nilaiAsli <= 90) return 4;
+            else return 5;
+        }
 
-    // public function getKriteriaPrestasi(Siswa $siswa)
-    // {
-    //     try {
-    //         $kriteria = $siswa->kriteriaPrestasi()->select('id', 'nama_kriteria')->get();
-    //         return response()->json($kriteria);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Terjadi kesalahan server'], 500);
-    //     }
-    // }
+        if ($kriteriaNama === 'Ilmu Pengetahuan Alam') {
+            if ($nilaiAsli <= 65) return 2;
+            elseif ($nilaiAsli <= 75) return 3;
+            elseif ($nilaiAsli <= 85) return 4;
+            else return 5;
+        }
+
+        if ($kriteriaNama === 'Ilmu Pengetahuan Sosial') {
+            if ($nilaiAsli <= 70) return 2;
+            elseif ($nilaiAsli <= 85) return 3;
+            elseif ($nilaiAsli <= 90) return 4;
+            else return 5;
+        }
+
+        if ($kriteriaNama === 'Pendidikan Agama Islam') {
+            if ($nilaiAsli <= 70) return 2;
+            elseif ($nilaiAsli <= 85) return 3;
+            elseif ($nilaiAsli <= 90) return 4;
+            else return 5;
+        }
+
+        if ($kriteriaNama === 'Pendidikan Kewarnegaraan') {
+            if ($nilaiAsli <= 70) return 2;
+            elseif ($nilaiAsli <= 85) return 3;
+            elseif ($nilaiAsli <= 90) return 4;
+            else return 5;
+        }
+
+        return $nilaiAsli;
+    }
 }

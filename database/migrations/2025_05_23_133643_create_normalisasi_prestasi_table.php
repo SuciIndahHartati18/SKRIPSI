@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\KriteriaPrestasi;
 use App\Models\Siswa;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,11 +15,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('hasil_seleksi_prestasi', function (Blueprint $table) {
+        Schema::create('normalisasi_prestasi', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Siswa::class)->constrained('siswa')->cascadeOnDelete();
-            $table->decimal('nilai_akhir_prestasi', 10,2);
-            $table->string('status_prestasi');
+            $table->foreignIdFor(KriteriaPrestasi::class)->constrained('kriteria_prestasi')->cascadeOnDelete();
+            $table->decimal('nilai_normalisasi_prestasi', 10, 2);
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hasil_seleksi_prestasi');
+        Schema::dropIfExists('normalisasi_prestasi');
     }
 };

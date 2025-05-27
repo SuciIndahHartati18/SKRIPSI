@@ -18,13 +18,13 @@ class KriteriaPrestasi extends Model
         return $this->belongsTo(Siswa::class);
     }
 
-     public function nilaiPrestasi()
+    public function nilaiPrestasi()
     {
-        return $this->hasOne(NilaiPrestasi::class);
+        return $this->hasMany(NilaiPrestasi::class);
     }
 
     public function normalisasiPrestasi()
     {
-        return $this->belongsToMany(NormalisasiPrestasi::class, 'kriteria_normalisasi_prestasi');
+        return $this->hasMany(NormalisasiPrestasi::class);
     }
 }

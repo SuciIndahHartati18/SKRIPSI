@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HasilSeleksiPrestasi;
+use App\Models\NormalisasiPrestasi;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 
@@ -24,12 +25,26 @@ class HasilSeleksiPrestasiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $siswas = Siswa::latest()->get();
+        $siswas = Siswa::has('normalisasiPrestasi')->latest()->get();
+
+        $selectedSiswa          = null;
+        $normalisasiPrestasi    = [];
+
+        if ($request->filled('siswa_id')) {
+            $selectedSiswa = Siswa::find($request->siswa_id);
+
+            if ($selectedSiswa) {
+                $normalisasiPrestasi = NormalisasiPrestasi::with('kriteriaPrestasi')
+                    ->where('siswa_id', $selectedSiswa->id)->get();
+            }
+        }
 
         return view('admin.hasil_seleksi_prestasi.create', [
-            'siswas' => $siswas,
+            'siswas'                => $siswas,
+            'selectedSiswa'         => $selectedSiswa,
+            'normalisasiPrestasi'   => $normalisasiPrestasi,
         ]);
     }
 
@@ -42,16 +57,31 @@ class HasilSeleksiPrestasiController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'siswa_id'              => ['required', 'exists:siswa,id'],
-            'nilai_akhir_prestasi'  => ['required', 'numeric'],
-            'status_prestasi'       => ['required'],
+            'siswa_id'          => ['required', 'exists:siswa,id'],
         ]);
-    
-        // Convert to proper decimal format
-        $validatedData['nilai_akhir_prestasi'] = number_format((float) $validatedData['nilai_akhir_prestasi'], 2, '.', '');
 
-        HasilSeleksiPrestasi::create($validatedData);
+        // $siswaId= $validatedData['siswa_id'];
 
+        $normalisasiPrestasi = NormalisasiPrestasi::with('kriteriaPrestasi')
+            ->where('siswa_id', $request->siswa_id)->get();
+
+        // if ($normalisasiPrestasi->isEmpty()) {
+        //     return back()->with('error', 'Normalisasi prestasi untuk siswa ini tidak tersedia!');
+        // }
+
+        // Hitung nilai Akhir dengan SAW
+        $nilaiAkhir = 0;
+        foreach ($normalisasiPrestasi as $normalisasi) {
+            $nilai      = $normalisasi->nilai_normalisasi_prestasi;
+            $bobot      = $normalisasi->kriteriaPrestasi->bobot_kriteria_prestasi;
+            $nilaiAkhir += $nilai * $bobot;
+        }
+
+        HasilSeleksiPrestasi::updateOrCreate([
+            'siswa_id'             => $request->siswa_id,
+            'nilai_akhir_prestasi' => $nilaiAkhir,
+        ]);
+        
         return redirect()->route('admin.hasil_seleksi_prestasi.create');
     }
 

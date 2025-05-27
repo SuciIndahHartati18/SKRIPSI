@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\KriteriaPrestasi;
+use App\Models\NilaiPrestasi;
 use App\Models\NormalisasiPrestasi;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
@@ -26,14 +27,27 @@ class NormalisasiPrestasiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $siswas             = Siswa::latest()->get();
+        $selectedSiswa      = null;
+        $nilaiPrestasi      = collect();
         $kriteriaPrestasi   = KriteriaPrestasi::latest()->get();
 
+        if ($request->has('siswa_id')) {
+            $selectedSiswa = Siswa::find($request->siswa_id);
+
+            if ($selectedSiswa) {
+                $nilaiPrestasi = NilaiPrestasi::where('siswa_id', $selectedSiswa->id)
+                    ->with('kriteriaPrestasi')->get()->keyBy('kriteria_prestasi_id');
+            }
+        }
+
         return view('admin.normalisasi_prestasi.create', [
-            'siswas'            => $siswas,
-            'kriteriaPrestasi'  => $kriteriaPrestasi,
+            'siswas'                => $siswas,
+            'selectedSiswa'         => $selectedSiswa,
+            'nilaiPrestasi'         => $nilaiPrestasi,
+            'kriteriaPrestasi'      => $kriteriaPrestasi,
         ]);
     }
 
@@ -47,23 +61,39 @@ class NormalisasiPrestasiController extends Controller
     {
         $validatedData = $request->validate([
             'siswa_id'                      => ['required', 'exists:siswa,id'],
-            'nilai_normalisasi_prestasi'    => ['required', 'numeric'],
-            'kriteria_prestasi_id'          => ['nullable', 'array'],
-            'kriteria_prestasi_id.*'        => ['exists:kriteria_prestasi,id'],
+            'nilai_normalisasi_prestasi'    => ['required', 'array'],
+            'nilai_normalisasi_prestasi.*'  => ['nullable', 'numeric'],
         ]);
 
-        $validatedData['nilai_normalisasi_prestasi'] = number_format((float) $validatedData['nilai_normalisasi_prestasi'], 2, '.', ',');
-        
-        DB::transaction(function () use ($validatedData) {
-            $normalisasi = NormalisasiPrestasi::create([
-                'siswa_id'                      => $validatedData['siswa_id'],
-                'nilai_normalisasi_prestasi'    => $validatedData['nilai_normalisasi_prestasi'],
-            ]);
+        $siswaId = $validatedData['siswa_id'];
 
-            $normalisasi->kriteriaPrestasi()->attach($validatedData['kriteria_prestasi_id']);
-        });
+        DB::beginTransaction();
+        try {
+            foreach ($validatedData['nilai_normalisasi_prestasi'] as $kriteriaId => $nilaiSiswa) {
+                if ($nilaiSiswa === null) continue;
 
-        return redirect()->route('admin.normalisasi_prestasi.create');
+                $maxNilai = NilaiPrestasi::where('kriteria_prestasi_id', $kriteriaId)->max('nilai_prestasi');
+
+                if ($maxNilai == 0) {
+                    $normalisasi = 0;
+                } else {
+                    $normalisasi = $nilaiSiswa / $maxNilai;
+                }
+
+                NormalisasiPrestasi::updateOrCreate([
+                    'siswa_id'              => $siswaId,
+                    'kriteria_prestasi_id'  => $kriteriaId,
+                ], [
+                    'nilai_normalisasi_prestasi' => $normalisasi,
+                ]);
+            }
+            
+            DB::commit();
+            return redirect()->route('admin.normalisasi_prestasi.create');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('admin.normalisasi_prestasi.create');
+        }
     }
 
     /**

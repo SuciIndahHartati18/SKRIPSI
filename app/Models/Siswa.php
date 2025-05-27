@@ -17,24 +17,9 @@ class Siswa extends Model
         return  $this->hasMany(HasilSeleksiTes::class);
     }
 
-    public function hasilSeleksiPrestasi()
-    {
-        return  $this->hasMany(HasilSeleksiPrestasi::class);
-    }
-
-    public function nilaiPrestasi()
-    {
-        return $this->hasMany(NilaiPrestasi::class);
-    }
-
     public function nilaiTes()
     {
         return $this->hasMany(NilaiTes::class);
-    }
-
-    public function KriteriaPrestasi()
-    {
-        return $this->hasMany(KriteriaPrestasi::class);
     }
 
     public function KriteriaTes()
@@ -47,8 +32,23 @@ class Siswa extends Model
         return $this->hasMany(NormalisasiTes::class);
     }
 
+    public function KriteriaPrestasi()
+    {
+        return $this->hasMany(KriteriaPrestasi::class);
+    }
+
+    public function nilaiPrestasi()
+    {
+        return $this->hasMany(NilaiPrestasi::class);
+    }
+
     public function NormalisasiPrestasi()
     {
         return $this->hasMany(NormalisasiPrestasi::class);
+    }
+
+    public function hasilSeleksiPrestasi()
+    {
+        return  $this->hasOne(HasilSeleksiPrestasi::class);
     }
 }

@@ -18,8 +18,7 @@ class KriteriaPrestasiFactory extends Factory
     public function definition()
     {
         return [
-            'siswa_id' => Siswa::factory(),
-            'nama_kriteria_prestasi' => fake()->randomElement(['akademik', 'non akademik']),
+            'nama_kriteria_prestasi' => $this->faker->randomElement(['Matematika', 'Bahasa Indonesia', 'IPA', 'IPS', 'Bahasa Inggris']),
             'tipe_kriteria_prestasi' => fake()->randomElement(['Ada', 'Tidak ada']),
             'bobot_kriteria_prestasi' => fake()->randomFloat(2, 0, 1000),
         ];

@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NormalisasiPrestasi extends Model
+class NilaiSiswa extends Model
 {
     use HasFactory;
-
-    protected $table = 'normalisasi_prestasi';
+    protected $table = 'nilai_siswa';
     protected $guarded = [];
 
-     public function siswa()
+    public function siswa()
     {
       return  $this->belongsTo(Siswa::class);
     }
@@ -22,4 +21,3 @@ class NormalisasiPrestasi extends Model
       return $this->belongsTo(KriteriaPrestasi::class);
     }
 }
-

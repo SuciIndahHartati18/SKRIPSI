@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\NilaiSiswaController;
 use App\Http\Controllers\Admin\SiswaController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,10 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/dashboard', 'dashboard')->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/nilai/create', [NilaiSiswaController::class, 'create'])->name('nilai.create');
+Route::post('/nilai', [NilaiSiswaController::class, 'store'])->name('nilai.store');
+
+require __DIR__. '/auth.php';
 require __DIR__. '/admin.php' ;
