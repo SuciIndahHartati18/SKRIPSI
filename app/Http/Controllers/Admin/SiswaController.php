@@ -16,6 +16,7 @@ class SiswaController extends Controller
     public function index()
     {
         $siswas = Siswa::latest()->simplePaginate(6);
+
         return view('admin.siswa.index', [
             'siswas' => $siswas,
         ]);
@@ -44,12 +45,12 @@ class SiswaController extends Controller
             'nama_siswa'    => ['required'],
             'alamat'        => ['required'],
             'jalur'         => ['required'],
-            'jenis_kelamin' => ['required'],
+            'jenis_kelamin' => ['required', 'in:Laki-laki,Perempuan'],
         ]);
 
         Siswa::create($validated);
         
-        return redirect()->route('admin.siswa.create');
+        return redirect()->route('admin.siswa.index');
     }
 
     /**
@@ -71,7 +72,9 @@ class SiswaController extends Controller
      */
     public function edit(Siswa $siswa)
     {
-        //
+        return view('admin.siswa.edit', [
+            'siswa' => $siswa,
+        ]);
     }
 
     /**
@@ -83,7 +86,17 @@ class SiswaController extends Controller
      */
     public function update(Request $request, Siswa $siswa)
     {
-        //
+        $validated = $request->validate([
+            'nisn'          => ['required'],
+            'nama_siswa'    => ['required'],
+            'alamat'        => ['required'],
+            'jalur'         => ['required'],
+            'jenis_kelamin' => ['required', 'in:Laki-laki,Perempuan'],
+        ]);
+
+        $siswa->update($validated);
+        
+        return redirect()->route('admin.siswa.index');
     }
 
     /**
@@ -95,6 +108,20 @@ class SiswaController extends Controller
     public function destroy(Siswa $siswa)
     {
         $siswa->delete();
-         return redirect()->route('admin.siswa.create');
+         return redirect()->route('admin.siswa.index');
+    }
+
+    // Search
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+
+        $siswas = Siswa::when($search, function ($query, $search) {
+                return $query->where('nama_siswa', 'like', '%' . $search . '%');
+        })->simplePaginate(6);
+
+        return view('admin.siswa.index', [
+            'siswas' => $siswas,
+        ]);
     }
 }

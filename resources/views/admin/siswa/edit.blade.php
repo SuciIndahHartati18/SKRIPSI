@@ -1,25 +1,27 @@
 <x-layout-dashboard>
     <x-slot:heading>
-        TAMBAH SISWA
+        EDIT SISWA
     </x-slot:heading>
 
-    <x-form.form action="{{ route('admin.siswa.store') }}">
+    <x-form.form action="{{ route('admin.siswa.update', $siswa) }}">
+        @method('PUT')
+
         <x-form.container variant="label-input">
             <x-form.label for="nisn">NISN</x-form.label>
-            <x-form.input type="text" name="nisn" id="nisn" :value="old('nisn')" placeholder="NISN..." />
+            <x-form.input type="text" name="nisn" id="nisn" :value="old('nisn', $siswa->nisn)" placeholder="NISN..." />
             <x-form.error errorFor="nisn" />
         </x-form.container>
 
         <x-form.container variant="label-input">
             <x-form.label for="nama_siswa">Nama Siswa</x-form.label>
-            <x-form.input type="text" name="nama_siswa" id="nama_siswa" :value="old('nama_siswa')" placeholder="Nama siswa..."/>
+            <x-form.input type="text" name="nama_siswa" id="nama_siswa" :value="old('nama_siswa', $siswa->nama_siswa)" placeholder="Nama siswa..."/>
             <x-form.error errorFor="nama_siswa" />
         </x-form.container>
 
         <x-form.container variant="label-input">
             <x-form.label for="alamat">Alamat</x-form.label>
             <x-form.textarea name="alamat" id="alamat" placeholder="Alamat">
-                {{ old('alamat') }}
+                {{ old('alamat', $siswa->alamat) }}
             </x-form.textarea>
             <x-form.error errorFor="alamat" />
         </x-form.container>
@@ -27,8 +29,8 @@
         <x-form.container variant="label-input">
             <x-form.label for="jalur">Jalur</x-form.label>
             <x-form.select name="jalur" id="jalur">
-                <option value="Prestasi" {{ old('jalur') === 'Prestasi' ? 'selected' : '' }}>Prestasi</option>
-                <option value="Tes" {{ old('jalur') === 'Tes' ? 'selected' : '' }}>Tes</option>
+                <option value="Prestasi" {{ old('jalur', $siswa->jalur) === 'Prestasi' ? 'selected' : '' }}>Prestasi</option>
+                <option value="Tes" {{ old('jalur', $siswa->jalur) === 'Tes' ? 'selected' : '' }}>Tes</option>
             </x-form.select>
             <x-form.error errorFor="jalur" />
         </x-form.container>
@@ -36,8 +38,8 @@
         <x-form.container variant="label-input">
             <x-form.label for="jenis_kelamin">Jenis Kelamin</x-form.label>
             <x-form.select name="jenis_kelamin" id="jenis_kelamin">
-                <option value="Laki-laki" {{ old('jenis_kelamin') === 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                <option value="Perempuan" {{ old('jenis_kelamin') === 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                <option value="Laki-laki" {{ old('jenis_kelamin', $siswa->jenis_kelamin) === 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                <option value="Perempuan" {{ old('jenis_kelamin', $siswa->jenis_kelamin) === 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
             </x-form.select>
             <x-form.error errorFor="jenis_kelamin" />
         </x-form.container>

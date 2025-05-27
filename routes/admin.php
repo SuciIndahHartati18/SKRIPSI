@@ -18,7 +18,10 @@ Route::prefix('admin/')->group(function () {
         Route::get('/siswa', 'index')->name('admin.siswa.index');
         Route::get('/siswa/create', 'create')->name('admin.siswa.create');
         Route::post('/siswa', 'store')->name('admin.siswa.store');
+        Route::get('/siswa/search', 'search')->name('admin.siswa.search');
     
+        Route::get('/siswa/{siswa}/edit', 'edit')->name('admin.siswa.edit');
+        Route::put('/siswa/{siswa}', 'update')->name('admin.siswa.update');
         Route::delete('/siswa/{siswa}', 'destroy')->name('admin.siswa.destroy');
     });
 

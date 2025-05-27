@@ -10,14 +10,15 @@
 
 <body class="bg-slate-100">
     <div class="h-screen flex">
-        <aside class="w-64 bg-slate-700 flex flex-col items-center py-3 gap-3">
+        <aside class="w-64 bg-rose-900 flex flex-col items-center py-3 gap-3">
             <span class="font-bold text-slate-100 text-3xl">LOGO'S</span>
 
             <span class="w-full border border-slate-100"></span>
 
             <nav class="w-full flex flex-col gap-1">
                 <x-nav-bar.link href="{{ route('dashboard') }}">Dashboard</x-nav-bar.link>
-                <x-nav-bar.link href="{{ route('admin.siswa.create') }}">Siswa</x-nav-bar.link>
+                <x-nav-bar.link href="{{ route('admin.siswa.index') }}">Siswa</x-nav-bar.link>
+                <x-nav-bar.link href="{{ route('admin.kriteria_prestasi.index') }}">Kriteria Prestasi</x-nav-bar.link>
 
                 <x-nav-bar.link href="{{ route('admin.kriteria_tes.create') }}">Kriteria Tes</x-nav-bar.link>
                 <x-nav-bar.link href="{{ route('admin.nilai_tes.create') }}">Nilai Tes</x-nav-bar.link>
@@ -33,7 +34,7 @@
 
         <main class="flex-1 overflow-auto">
             <div class="sticky top-0 left-0 bg-slate-200 px-3 py-1 shadow-md shadow-700">
-                <span class="font-semibold text-slate-700 text-2xl">{{ $heading }}</span>
+                <span class="font-bold text-rose-900 text-2xl">{{ $heading }}</span>
             </div>
 
             <div class="flex flex-col p-4">
