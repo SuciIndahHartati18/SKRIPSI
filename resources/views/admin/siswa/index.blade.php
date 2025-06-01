@@ -7,7 +7,7 @@
         <div class="bg-slate-100 flex justify-between">
             <div class="flex gap-3">
                 <a href="{{ route('admin.siswa.create') }}" class="w-fit bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500">+ Tambah</a>
-                <a href="#" class="w-fit bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500">Cetak</a>
+                <a href="{{ route('print.siswa.print') }}" target="_blank" class="w-fit bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500">Cetak</a>
             </div>
     
             <form method="GET" action="{{ route('admin.siswa.search') }}">
