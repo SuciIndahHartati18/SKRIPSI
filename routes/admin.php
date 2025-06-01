@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AkunController;
 use App\Http\Controllers\Admin\HasilSeleksiPrestasiController;
 use App\Http\Controllers\Admin\KriteriaPrestasiController;
 use App\Http\Controllers\Admin\NilaiPrestasiController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\NormalisasiTesController;
 use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\PerhitunganJalurPrestasiController;
 use App\Http\Controllers\PerhitunganJalurTesController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin/')->middleware('auth')->group(function () {
@@ -54,6 +56,11 @@ Route::prefix('admin/')->middleware('auth')->group(function () {
 
     Route::controller(PerhitunganJalurTesController::class)->group(function () {
         Route::get('/perhitungan-jalur-tes', 'index')->name('admin.perhitungan_jalur_tes.index');
+    });
+
+    Route::controller(AkunController::class)->group(function () {
+        Route::get('/akun/{user}/edit', 'edit')->name('admin.akun.edit');
+        Route::put('/akun/{user}', 'update')->name('admin.akun.update');
     });
 
     Route::controller(HasilSeleksiPrestasiController::class)->group(function () {

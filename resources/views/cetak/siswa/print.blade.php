@@ -1,11 +1,11 @@
 <x-layout>
-    <div class="bg-white h-screen flex flex-col justify-center items-center px-6 gap-3">
+    <div class="bg-white h-screen flex flex-col justify-center items-center px-6 gap-3" style="font-family: Times New Roman, Times, serif;">
         <div class="w-full flex justify-between items-center">
             <img src="{{ asset('images/Logo.png') }}" alt="Logo's" class="w-24 bg-cover bg-center">
             
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-1">
                 <p class="font-bold text-center text-4xl">MTs.S Manhajussalam</p>
-                <p class="text-center text-xl">Jl. Yani Km 98,5 Jorong Kec. Jorong, Kab. Tanah Laut</p>
+                <p class="text-center text-xl">Jl. A Yani Km 98,5 Jorong Kec. Jorong, Kab. Tanah Laut</p>
             </div>
 
             <span></span>
@@ -14,18 +14,18 @@
         <span class="w-full" style="border: 1px solid;"></span>
         
         <!-- tabel -->
-        <div class="flex flex-col items-center">
-            <span>Data Seleksi Siswa Baru</span>
+        <div class="flex flex-col items-center gap-3">
+            <span class="font-bold text-center text-2xl">Data Seleksi Siswa Baru</span>
 
             <table class="table-auto">
                 <thead>
                     <tr>
-                        <td class="times font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">No.</td>
-                        <td class="times font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Nisn</td>
-                        <td class="times font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Nama</td>
-                        <td class="times font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Alamat</td>
-                        <td class="times font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Jalur</td>
-                        <td class="times font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Keterangan</td>
+                        <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">No.</td>
+                        <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Nisn</td>
+                        <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Nama</td>
+                        <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Alamat</td>
+                        <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Jalur</td>
+                        <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Keterangan</td>
                     </tr>
                 </thead>
                 <tbody>
