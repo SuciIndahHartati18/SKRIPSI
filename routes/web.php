@@ -26,4 +26,5 @@ Route::get('/nilai/create', [NilaiSiswaController::class, 'create'])->name('nila
 Route::post('/nilai', [NilaiSiswaController::class, 'store'])->name('nilai.store');
 
 require __DIR__. '/auth.php';
-require __DIR__. '/admin.php' ;
+require __DIR__. '/admin.php';
+require __DIR__. '/print.php';
