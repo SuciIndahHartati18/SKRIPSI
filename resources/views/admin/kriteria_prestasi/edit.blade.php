@@ -1,6 +1,6 @@
 <x-layout-dashboard>
     <x-slot:heading>
-        Kriteria Prestasi
+        Edit Data Kriteria Prestasi
     </x-slot:heading>
 
     <x-form.form action="{{ route('admin.kriteria_prestasi.update', $kriteriaPrestasi) }}">

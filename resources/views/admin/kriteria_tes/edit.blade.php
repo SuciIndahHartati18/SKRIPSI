@@ -1,6 +1,6 @@
 <x-layout-dashboard>
     <x-slot:heading>
-        Kriteria Tes
+        Edit Data Kriteria Tes
     </x-slot:heading>
 
     <x-form.form action="{{ route('admin.kriteria_tes.update', $kriteriaTes) }}">

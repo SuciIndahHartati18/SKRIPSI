@@ -11,35 +11,47 @@
             <span></span>
         </div>
 
-        <span class="w-full border"></span>
+        <span class="w-full" style="border: 1px solid;"></span>
         
+        <!-- tabel -->
         <div class="flex flex-col items-center">
             <span>Data Seleksi Siswa Baru</span>
 
             <table class="table-auto">
                 <thead>
                     <tr>
-                        <td class="font-bold text-center border border-grey-900 whitespace-wrap px-4 py-1">No.</td>
-                        <td class="font-bold text-center border border-grey-900 whitespace-wrap px-4 py-1">Nisn</td>
-                        <td class="font-bold text-center border border-grey-900 whitespace-wrap px-4 py-1">Nama</td>
-                        <td class="font-bold text-center border border-grey-900 whitespace-wrap px-4 py-1">Alamat</td>
-                        <td class="font-bold text-center border border-grey-900 whitespace-wrap px-4 py-1">Jalur</td>
-                        <td class="font-bold text-center border border-grey-900 whitespace-wrap px-4 py-1">Keterangan</td>
+                        <td class="times font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">No.</td>
+                        <td class="times font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Nisn</td>
+                        <td class="times font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Nama</td>
+                        <td class="times font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Alamat</td>
+                        <td class="times font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Jalur</td>
+                        <td class="times font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Keterangan</td>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($siswas as $siswa)
                         <tr>
-                            <td class="text-center border border-grey-900 whitespace-wrap px-4 py-1">{{ $loop->iteration }}</td>
-                            <td class="text-center border border-grey-900 whitespace-wrap px-4 py-1">{{ $siswa->nisn }}</td>
-                            <td class="text-center border border-grey-900 whitespace-wrap px-4 py-1">{{ $siswa->nama_siswa }}</td>
-                            <td class="text-center border border-grey-900 whitespace-wrap px-4 py-1">{{ $siswa->alamat }}</td>
-                            <td class="text-center border border-grey-900 whitespace-wrap px-4 py-1">{{ $siswa->jalur }}</td>
-                            <td class="text-center border border-grey-900 whitespace-wrap px-4 py-1"> - </td>
+                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">{{ $loop->iteration }}</td>
+                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">{{ $siswa->nisn }}</td>
+                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">{{ $siswa->nama_siswa }}</td>
+                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">{{ $siswa->alamat }}</td>
+                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">{{ $siswa->jalur }}</td>
+                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;"> - </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
+
+        <div class="w-full h-32 flex justify-end">
+            <div class="w-1/6 flex flex-col justify-between">
+                <div class="flex flex-col px-4">
+                    <span>Jorong,</span>
+                    <span>Kepala Sekolah</span>
+                </div>
+
+                <span class="w-full" style="border: 1px solid;"></span>
+            </div>
+        </div>
     </div>
-</x-layout>`
+</x-layout>
