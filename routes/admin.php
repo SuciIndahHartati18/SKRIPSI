@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\HasilSeleksiTesController;
 use App\Http\Controllers\Admin\KriteriaTesController;
 use App\Http\Controllers\Admin\NilaiTesController;
 use App\Http\Controllers\Admin\NormalisasiTesController;
-
+use App\Http\Controllers\Admin\RankingController;
 use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\PerhitunganJalurPrestasiController;
 use App\Http\Controllers\PerhitunganJalurTesController;
@@ -56,6 +56,17 @@ Route::prefix('admin/')->middleware('auth')->group(function () {
 
     Route::controller(PerhitunganJalurTesController::class)->group(function () {
         Route::get('/perhitungan-jalur-tes', 'index')->name('admin.perhitungan_jalur_tes.index');
+    });
+
+    Route::controller(RankingController::class)->group(function () {
+        Route::get('/ranking', 'index')->name('admin.ranking.index');
+        Route::get('/ranking/create', 'create')->name('admin.ranking.create');
+        Route::post('/ranking', 'store')->name('admin.ranking.store');
+
+        Route::get('/ranking/filter', 'filterByTahunAjaran')->name('admin.ranking.filter');
+
+        Route::get('/ranking/update-ranking', 'showUpdateForm')->name('admin.ranking.showUpdateForm');
+        Route::post('/ranking/update-ranking', 'updateRanking')->name('admin.ranking.updateRanking');
     });
 
     Route::controller(AkunController::class)->group(function () {

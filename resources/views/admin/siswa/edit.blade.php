@@ -19,6 +19,12 @@
         </x-form.container>
 
         <x-form.container variant="label-input">
+            <x-form.label for="tahun_ajaran">Nama Siswa</x-form.label>
+            <x-form.input type="text" name="tahun_ajaran" id="tahun_ajaran" :value="old('tahun_ajaran', $siswa->tahun_ajaran)" placeholder="20XX"/>
+            <x-form.error errorFor="tahun_ajaran" />
+        </x-form.container>
+
+        <x-form.container variant="label-input">
             <x-form.label for="alamat">Alamat</x-form.label>
             <x-form.textarea name="alamat" id="alamat" placeholder="Alamat">
                 {{ old('alamat', $siswa->alamat) }}

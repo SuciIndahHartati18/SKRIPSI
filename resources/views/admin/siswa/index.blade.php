@@ -25,6 +25,7 @@
                             <td class="font-semibold text-slate-100 text-lg text-center px-3 py-2 whitespace-nowrap">No.</td>
                             <td class="font-semibold text-slate-100 text-lg text-center px-3 py-2 whitespace-nowrap">NISN</td>
                             <td class="font-semibold text-slate-100 text-lg text-center px-3 py-2 whitespace-nowrap">Nama Siswa</td>
+                            <td class="font-semibold text-slate-100 text-lg text-center px-3 py-2 whitespace-nowrap">Tahun Ajaran</td>
                             <td class="font-semibold text-slate-100 text-lg text-center px-3 py-2 whitespace-nowrap">Alamat Siswa</td>
                             <td class="font-semibold text-slate-100 text-lg text-center px-3 py-2 whitespace-nowrap">Jalur</td>
                             <td class="font-semibold text-slate-100 text-lg text-center px-3 py-2 whitespace-nowrap">Jenis Kelamin</td>
@@ -37,6 +38,7 @@
                                 <td class="font-medium text-slate-700 text-md text-center px-3 py-2 whitespace-nowrap">{{ $loop->iteration }}</td>
                                 <td class="font-medium text-slate-700 text-md text-center px-3 py-2 whitespace-nowrap">{{ $siswa->nisn }}</td>
                                 <td class="font-medium text-slate-700 text-md text-center px-3 py-2 whitespace-nowrap">{{ $siswa->nama_siswa }}</td>
+                                <td class="font-medium text-slate-700 text-md text-center px-3 py-2 whitespace-nowrap">{{ $siswa->tahun_ajaran }}</td>
                                 <td class="font-medium text-slate-700 text-md text-start px-3 py-2 whitespace-nowrap">{{ $siswa->alamat }}</td>
                                 <td class="font-medium text-slate-700 text-md text-center px-3 py-2 whitespace-nowrap">{{ $siswa->jalur }}</td>
                                 <td class="font-medium text-slate-700 text-md text-center px-3 py-2 whitespace-nowrap">{{ $siswa->jenis_kelamin }}</td>

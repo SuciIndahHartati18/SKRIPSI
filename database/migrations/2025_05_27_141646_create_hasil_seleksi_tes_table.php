@@ -18,7 +18,6 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Siswa::class)->constrained('siswa')->cascadeOnDelete();
             $table->decimal('nilai_akhir_tes', 10, 2);
-            $table->string('status_prestasi')->nullable();
             $table->timestamps();
         });
     }

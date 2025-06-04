@@ -16,8 +16,8 @@ class KriteriaTesSeeder extends Seeder
     public function run()
     {
         collect([
-            ['Mengaji', 'benefit', 0.3],
-            ['Wawancara', 'benefit', 0.4],
+            ['Mengaji', 'benefit', 0.4],
+            ['Wawancara', 'benefit', 0.3],
             ['Psikotes', 'benefit', 0.3],
         ])->each(function ($item) {
             KriteriaTes::factory()->create([

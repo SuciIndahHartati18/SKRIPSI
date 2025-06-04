@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('alamat');
             $table->string('jalur');
             $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan'])->default('Laki-laki');
+            $table->string('tahun_ajaran');
             $table->timestamps();
         });
     }

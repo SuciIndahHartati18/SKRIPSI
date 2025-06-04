@@ -51,4 +51,9 @@ class Siswa extends Model
     {
         return  $this->hasOne(HasilSeleksiPrestasi::class);
     }
+
+    public function ranking()
+    {
+        return  $this->hasOne(Ranking::class);
+    }
 }

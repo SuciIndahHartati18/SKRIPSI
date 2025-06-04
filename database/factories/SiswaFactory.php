@@ -17,11 +17,12 @@ class SiswaFactory extends Factory
     public function definition()
     {
         return [
-            'nisn' => fake()->numberBetween(100, 1200),
-            'nama_siswa' => fake()->name(),
-            'alamat' => fake()->address(),
-            'jalur' => fake()->randomElement(['Prestasi', 'Tes']),
+            'nisn'          => fake()->numberBetween(10000000000, 9999999999),
+            'nama_siswa'    => fake()->name(),
+            'alamat'        => fake()->address(),
+            'jalur'         => fake()->randomElement(['Prestasi', 'Tes']),
             'jenis_kelamin' => fake()->randomElement(['Laki-laki', 'Perempuan']),
+            'tahun_ajaran'  => fake()->randomElement(['2025', '2024']),
         ];
     }
 }

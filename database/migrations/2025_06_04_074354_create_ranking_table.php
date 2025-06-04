@@ -14,10 +14,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('hasil_seleksi_prestasi', function (Blueprint $table) {
+        Schema::create('ranking', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Siswa::class)->constrained('siswa')->cascadeOnDelete();
-            $table->decimal('nilai_akhir_prestasi', 10,2);
+            $table->decimal('nilai_akhir', 10, 2);
+            $table->string('ranking');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hasil_seleksi_prestasi');
+        Schema::dropIfExists('ranking');
     }
 };

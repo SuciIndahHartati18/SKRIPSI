@@ -25,6 +25,7 @@
                     <x-nav-bar.link href="{{ route('admin.kriteria_tes.index') }}">Kriteria Tes</x-nav-bar.link>
                     <x-nav-bar.link href="{{ route('admin.perhitungan_jalur_prestasi.index') }}">Perhitungan Prestasi</x-nav-bar.link>
                     <x-nav-bar.link href="{{ route('admin.perhitungan_jalur_tes.index') }}">Perhitungan Tes</x-nav-bar.link>
+                    <x-nav-bar.link href="{{ route('admin.ranking.index') }}">Ranking</x-nav-bar.link>
                     <x-nav-bar.link href="{{ route('admin.akun.edit', Auth::user()->id) }}">Ganti Password</x-nav-bar.link>
                 </nav>
             </div>
