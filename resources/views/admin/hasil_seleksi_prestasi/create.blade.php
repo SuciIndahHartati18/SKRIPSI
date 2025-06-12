@@ -31,14 +31,26 @@
                             <x-form.input type="text" name="" value="{{ $normalisasi->nilai_normalisasi_prestasi }}" />
                         </x-form.container>
                     @endforeach
+                    
+                    <x-form.container variant="button">
+                        <a href="{{ route('admin.perhitungan_jalur_prestasi.index') }}" class="inline-block bg-red-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-red-600">Batal</a>
+                        <button type="submit" class="bg-blue-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-blue-600">Simpan</button>
+                    </x-form.container>
                 </div>
-
-                <x-form.container variant="button">
-                    <a href="{{ route('dashboard') }}" class="inline-block bg-red-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-red-600">Batal</a>
-                    <button type="submit" class="bg-blue-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-blue-600">Simpan</button>
-                </x-form.container>
             </form>
         @endif
     </div>
+
+    <span class="my-4"></span>
+
+    @if ($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
+            <ul class="list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
 </x-layout-dashboard>

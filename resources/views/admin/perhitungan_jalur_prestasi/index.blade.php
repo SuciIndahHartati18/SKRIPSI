@@ -120,7 +120,9 @@
                             <x-table.tr variant="head">
                                 <x-table.td variant="head">No.</x-table.td>
                                 <x-table.td variant="head">Nama Perserta</x-table.td>
+                                <x-table.td variant="head">Tahun Ajaran</x-table.td>
                                 <x-table.td variant="head">Nilai Akhir Prestasi</x-table.td>
+                                <x-table.td variant="head">Status Prestasi</x-table.td>
                             </x-table.tr>
                         </thead>
                         <tbody>
@@ -128,7 +130,9 @@
                                 <x-table.tr variant="body">
                                     <x-table.td variant="body">{{ $loop->iteration }}</x-table.td>
                                     <x-table.td variant="body">{{ $siswa->nama_siswa }}</x-table.td>
+                                    <x-table.td variant="body">{{ $siswa->tahun_ajaran }}</x-table.td>
                                     <x-table.td variant="body">{{ $siswa->hasilSeleksiPrestasi->nilai_akhir_prestasi ?? '-' }}</x-table.td>
+                                    <x-table.td variant="body">{{ $siswa->hasilSeleksiPrestasi->status_prestasi ?? '-' }}</x-table.td>
                                 </x-table.tr>
                             @endforeach
                         </tbody>

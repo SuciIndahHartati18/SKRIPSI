@@ -49,8 +49,21 @@ class NilaiPrestasiController extends Controller
             'kriteria_prestasi_id'  => ['required', 'array'],
             'kriteria_prestasi_id.*'=> ['required', 'exists:kriteria_prestasi,id'],
             'nilai_prestasi'        => ['required', 'array'],
-            'nilai_prestasi.*'      => ['required', 'numeric'],
+            'nilai_prestasi.*'      => ['required', 'numeric', 'between:0,100'],
         ]);
+
+        // Cek apakah siswa sudah pernah dimasukkan
+        $siswa = Siswa::findOrFail($valiadatedData['siswa_id']);
+        $alreadyExists = NilaiPrestasi::whereHas('siswa', function ($query) use ($siswa) {
+            $query->where('nama_siswa', $siswa->nama_siswa)
+                ->where('tahun_ajaran', $siswa->tahun_ajaran);
+        })->exists();
+
+        if ($alreadyExists) {
+            return redirect()->back()
+                ->withErrors(['siswa_id' => 'Nilai prestasi untuk siswa dengan Nama dan Tahun Ajaran ini sudah dimasukkan!'])
+                ->withInput();
+        }
 
         foreach ($valiadatedData['kriteria_prestasi_id'] as $index => $kriteriaId) {
             $kriteria   = KriteriaPrestasi::find($kriteriaId);

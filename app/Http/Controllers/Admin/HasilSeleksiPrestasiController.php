@@ -57,17 +57,26 @@ class HasilSeleksiPrestasiController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'siswa_id'          => ['required', 'exists:siswa,id'],
+            'siswa_id' => ['required', 'exists:siswa,id'],
         ]);
 
-        // $siswaId= $validatedData['siswa_id'];
+        $siswa = Siswa::findOrFail($request->siswa_id);
 
+        // Cek apakah siswa dengan nama dan tahun ajaran yang sama sudah ada
+        $alreadyExists = HasilSeleksiPrestasi::whereHas('siswa', function ($query) use ($siswa) {
+            $query->where('nama_siswa', $siswa->nama_siswa)
+                ->where('tahun_ajaran', $siswa->tahun_ajaran);
+        })->exists();
+
+        if ($alreadyExists) {
+            return back()->withErrors([
+                'siswa_id' => 'Siswa dengan Nama dan Tahun Ajaran ini sudah memiliki hasil seleksi prestasi!'
+            ])->withInput();
+        }
+
+        // Ambil data normalisasi prestasi
         $normalisasiPrestasi = NormalisasiPrestasi::with('kriteriaPrestasi')
             ->where('siswa_id', $request->siswa_id)->get();
-
-        // if ($normalisasiPrestasi->isEmpty()) {
-        //     return back()->with('error', 'Normalisasi prestasi untuk siswa ini tidak tersedia!');
-        // }
 
         // Hitung nilai Akhir dengan SAW
         $nilaiAkhir = 0;
@@ -77,10 +86,16 @@ class HasilSeleksiPrestasiController extends Controller
             $nilaiAkhir += $nilai * $bobot;
         }
 
-        HasilSeleksiPrestasi::updateOrCreate([
-            'siswa_id'             => $request->siswa_id,
-            'nilai_akhir_prestasi' => $nilaiAkhir,
-        ]);
+        // Tentukan status kelulusan
+        $statusPrestasi = $nilaiAkhir >= 0.65 ? 'Lulus' : 'Tidak Lulus';
+
+        HasilSeleksiPrestasi::updateOrCreate(
+            ['siswa_id' => $request->siswa_id],
+            [
+                'nilai_akhir_prestasi'  => $nilaiAkhir,
+                'status_prestasi'       => $statusPrestasi, 
+            ]
+        );
         
         return redirect()->route('admin.perhitungan_jalur_prestasi.index');
     }

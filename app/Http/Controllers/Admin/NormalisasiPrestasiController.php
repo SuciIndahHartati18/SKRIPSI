@@ -67,6 +67,19 @@ class NormalisasiPrestasiController extends Controller
 
         $siswaId = $validatedData['siswa_id'];
 
+        // Cek apakah siswa dengan nama dan tahun ajaran sudah dimasukkan ke normalisasi
+        $siswa = Siswa::findOrFail($siswaId);
+        $alreadyExists = NormalisasiPrestasi::whereHas('siswa', function ($query) use ($siswa) {
+            $query->where('nama_siswa', $siswa->nama_siswa)
+                ->where('tahun_ajaran', $siswa->tahun_ajaran);
+        })->exists();
+
+        if ($alreadyExists) {
+            return redirect()->back()
+                ->withErrors(['siswa_id' => 'Normalisasi untuk siswa dengan Nama dan Tahun Ajaran ini sudah dimasukkan!'])
+                ->withInput();
+        }
+
         DB::beginTransaction();
         try {
             foreach ($validatedData['nilai_normalisasi_prestasi'] as $kriteriaId => $nilaiSiswa) {

@@ -14,7 +14,7 @@ class PerhitunganJalurPrestasiController extends Controller
      */
     public function index()
     {
-        $siswas = Siswa::with('nilaiPrestasi.kriteriaPrestasi')->get();
+        $siswas = Siswa::with('nilaiPrestasi.kriteriaPrestasi')->latest()->get();
 
         return view('admin.perhitungan_jalur_prestasi.index', [
             'siswas'    => $siswas
