@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\HasilSeleksiPrestasi;
 use App\Models\Ranking;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
@@ -12,26 +11,16 @@ class RankingController extends Controller
 {
     public function index(Request $request)
     {
-        $tahunAjaran = $request->input('tahun_ajaran');
-
-        $tahunAjaranList = Siswa::select('tahun_ajaran')->distinct()->pluck('tahun_ajaran');
-
-        $rankings = Ranking::with('siswa')
-            ->whereHas('siswa', function ($query) use ($tahunAjaran) {
-                $query->where('tahun_ajaran', $tahunAjaran);
-            })
-            ->orderBy('ranking')
-            ->get();
-
-        return view('admin.ranking.index', compact('rankings', 'tahunAjaranList', 'tahunAjaran'));
-
-        /*
-        $rankings = Ranking::latest()->get();
+        $tahunAjaran    = $request->input('tahun_ajaran');
+        $query          = $this->filterRankingQuery($tahunAjaran);
+        $rankings       = $query->latest()->paginate(10);
+        $tahunAjarans   = Siswa::select('tahun_ajaran')->distinct()->orderBy('tahun_ajaran', 'desc')->pluck('tahun_ajaran');
 
         return view('admin.ranking.index', [
-            'rankings' => $rankings,
+            'rankings'      => $rankings,
+            'tahunAjaran'   => $tahunAjaran,
+            'tahunAjarans'  => $tahunAjarans,
         ]);
-        */
     }
 
     public function create(Request $request)
@@ -39,9 +28,9 @@ class RankingController extends Controller
         $siswas = Siswa::whereHas('hasilSeleksiPrestasi')->whereHas('hasilSeleksiTes')->get();
 
         // Ambil siswa terpilih
-        $siswaTerpilih = null;
+        $siswaTerpilih      = null;
         $nilaiAkhirPrestasi = null;
-        $nilaiAkhirTes = null;
+        $nilaiAkhirTes      = null;
 
         if ($request->filled('siswa_id')) {
             $siswaTerpilih = Siswa::find($request->siswa_id);
@@ -71,6 +60,19 @@ class RankingController extends Controller
         // Ambil nilai input
         $nilaiPrestasi  = $request->input('nilai_akhir_prestasi');
         $nilaiTes       = $request->input('nilai_akhir_tes');
+
+        // Cek apakah siswa sudah pernah dimasukkan
+        $siswa          = Siswa::findOrFail($request['siswa_id']);
+        $alreadyExists  = Ranking::whereHas('siswa', function ($query) use ($siswa) {
+            $query->where('nama_siswa', $siswa->nama_siswa)
+                ->where('tahun_ajaran', $siswa->tahun_ajaran);
+        })->exists();
+
+        if ($alreadyExists) {
+            return redirect()->back()
+                ->withErrors(['siswa_id' => 'Ranking untuk siswa dengan Nama dan Tahun Ajaran ini sudah dimasukkan!'])
+                ->withInput();
+        }
 
         // Hitung nilai akhir dengan bobot
         $nilaiAkhir = ($nilaiPrestasi * 0.60) + ($nilaiTes * 0.40);
@@ -151,10 +153,7 @@ class RankingController extends Controller
         // Ambil ranking yang berkaitan dengan siswa yang memiliki tahun ajaran yang sama
         $rankings = Ranking::whereHas('siswa', function ($query) use ($tahunAjaran) {
             $query->where('tahun_ajaran', $tahunAjaran);
-        })
-        ->with('siswa') // optional, untuk menghindari lazy loading
-        ->orderByDesc('nilai_akhir')
-        ->get();
+        })->with('siswa')->orderByDesc('nilai_akhir')->get();
 
         foreach ($rankings as $index => $ranking) {
             $ranking->update([
@@ -166,19 +165,16 @@ class RankingController extends Controller
     }
 
     // Filter
-    public function filterByTahunAjaran(Request $request)
+    private function filterRankingQuery(?string $tahunAjaran)
     {
-        $tahunAjaran = $request->input('tahun_ajaran');
+        $query = Ranking::with('siswa');
 
-        $tahunAjaranList = Siswa::select('tahun_ajaran')->distinct()->pluck('tahun_ajaran');
+        if ($tahunAjaran && $tahunAjaran !== 'all') {
+            $query->whereHas('siswa', function ($q) use ($tahunAjaran) {
+                $q->where('tahun_ajaran', $tahunAjaran);
+            });
+        }
 
-        $rankings = Ranking::with('siswa')
-            ->whereHas('siswa', function ($query) use ($tahunAjaran) {
-                $query->where('tahun_ajaran', $tahunAjaran);
-            })
-            ->orderBy('ranking')
-            ->get();
-
-        return view('admin.ranking.index', compact('rankings', 'tahunAjaranList', 'tahunAjaran'));
+        return $query;
     }
 }

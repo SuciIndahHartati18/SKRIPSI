@@ -9,21 +9,20 @@
             <x-table.link variant="create" href="{{ route('admin.ranking.showUpdateForm') }}">+ Ranking</x-table.link>
         </div>
 
-        <div class="flex h-fit">
-            <form method="GET" action="{{ route('admin.ranking.filter') }}" class="mb-4">
-                <div class="h-fit">
-                    <label for="tahun_ajaran" class="font-semibold text-rose-900 text-lg">Filter: </label>
-                    <select name="tahun_ajaran" id="tahun_ajaran" onchange="this.form.submit()" class="border border-rose-700 bg-slate-100">
-                        <option value="">-- Semua Tahun --</option>
-                        @foreach ($tahunAjaranList as $tahun)
-                            <option value="{{ $tahun }}" {{ $tahun == $tahunAjaran ? 'selected' : '' }}>
-                                {{ $tahun }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </form>
-        </div>
+        <form method="GET" action="{{ route('admin.ranking.index') }}">
+            <div class="flex gap-3">
+                <select name="tahun_ajaran" id="tahun_ajaran" class="bg-slate-100 font-semibold text-rose-900 text-lg text-center px-3 py-1 transition delay-50 duration-200 hover:ring hover:ring-rose-900 hover:ring-offset-2 rounded-sm border border-rose-900">
+                    <option value="">Semua</option>
+                    @foreach ($tahunAjarans as $tahun)
+                        <option value="{{ $tahun }}" {{ request('tahun_ajaran') == $tahun ? 'selected' : '' }}>
+                            {{ $tahun }}
+                        </option>
+                    @endforeach
+                </select>
+    
+                <button type="submit" class="bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500">Filter</button>
+            </div>
+        </form>
     </div>
 
     <x-table.container variant="main">
