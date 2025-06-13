@@ -19,25 +19,26 @@ class SiswaController extends Controller
         ]);
     }
 
-    public function exportPdf()
+    public function printPdf(Request $request)
     {
+        // Filter siswa berdasarkan tahun ajaran
+        $tahunAjaran= $request->input('tahun_ajaran');
+        $siswas     = Siswa::when($tahunAjaran, function ($query) use ($tahunAjaran) {
+            return $query->where('tahun_ajaran', $tahunAjaran);
+        })->get();
+
         $html = view('cetak.siswa.print', [
-            'siswas' => Siswa::all(),
+            'siswas' => $siswas,
         ])->render();
 
-        $folderPath = storage_path('app/public/cetak/siswa');
-        $pdfPath = $folderPath . '/siswa.pdf';
-        if (!File::exists($folderPath)) {
-            File::makeDirectory($folderPath, 0755, true); // true = recursive
-        }
-
-        Browsershot::html($html)
+        $pdf = Browsershot::html($html)
             ->format('A4')
             ->landscape()
-            ->margins(0, 0, 0, 0)
+            ->margins(10, 0, 10, 0)
             ->showBackground()
-            ->savePdf($pdfPath);
+            ->pdf();
         
-        return response()->download($pdfPath);
+        return response($pdf)
+            ->header('Content-Type', 'application/pdf');
     }
 }

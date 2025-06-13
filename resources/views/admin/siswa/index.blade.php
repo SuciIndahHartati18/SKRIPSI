@@ -6,14 +6,19 @@
     <div class="flex flex-col gap-3">
         <div class="bg-slate-100 flex justify-between">
             <div class="flex gap-3">
-                <a href="{{ route('admin.siswa.create') }}" class="w-fit bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500">+ Tambah</a>
-                <a href="{{ route('print.siswa.print') }}" target="_blank" class="w-fit bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500">Cetak</a>
+                <a href="{{ route('admin.siswa.create') }}" class="inline-block w-fit bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500">+ Tambah</a>
+                <!-- <a href="{{ route('print.siswa.print') }}" target="_blank" class="w-fit bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500">Cetak</a> -->
             </div>
     
             <form method="GET" action="{{ route('admin.siswa.search') }}">
-                @csrf
-                <input type="text" name="search" value="{{ request('search') }}"  placeholder="Search..."
-                    class="bfg-slate-200 text-lg px-3 py-1 transition delay-50 duration-200 hover:ring hover:ring-rose-900 hover:ring-offset-2">
+                <div class="flex items-center gap-2">
+                    <input type="text" name="search" value="{{ request('search') }}"  placeholder="Search..."
+                        class="bg-slate-100 text-lg px-3 py-1 transition delay-50 duration-200 hover:ring hover:ring-rose-900 hover:ring-offset-2 rounded-sm shadow-sm shadow-slate-500">
+                    
+                    <button type="submit" class="w-fit bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500 shadow-sm shadow-slate-500">
+                        Cari
+                    </button>
+                </div>
             </form>
         </div>
     
@@ -61,6 +66,25 @@
             <div class="flex justify-between p-3">
                 <span class="w-full">{{ $siswas->withQueryString()->links() }}</span>
             </div>
+        </div>
+
+        <div>
+            <form method="GET" action="{{ route('admin.siswa.index') }}">
+                <div class="flex justify-end items-center gap-3">
+                    <select name="tahun_ajaran" id="tahun_ajaran" class="w-1/5 bg-slate-100 font-semibold text-rose-900 text-lg text-center px-3 py-1 transition delay-50 duration-200 hover:ring hover:ring-rose-900 hover:ring-offset-2 rounded-sm border border-rose-900">
+                        <option value="">Tahun Ajaran</option>
+                        <option value="">Semua</option>
+                        @foreach ($tahunAjarans as $tahun)
+                            <option value="{{ $tahun }}" {{ request('tahun_ajaran') == $tahun ? 'selected' : '' }}>
+                                {{ $tahun }}
+                            </option>
+                        @endforeach
+                    </select>
+    
+                    <button type="submit" name="action" value="filter" class="w-fit bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500">Filter</button>
+                    <button type="submit" name="action" value="print" formaction="{{ route('print.siswa.print') }}" formtarget="_blank" class="w-fit bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500">Cetak</button>
+                </div>
+            </form>
         </div>
     </div>
 </x-layout-dashboard>

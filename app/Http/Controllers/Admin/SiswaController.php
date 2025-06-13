@@ -8,36 +8,29 @@ use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $siswas = Siswa::latest()->simplePaginate(6);
+        $tahunAjaran    = $request->input('tahun_ajaran');
+        $query          = Siswa::query();
+
+        if ($tahunAjaran) {
+            $query->where('tahun_ajaran', $tahunAjaran);
+        }
+        
+        $siswas         = $query->latest()->simplePaginate(6);
+        $tahunAjarans   = Siswa::select('tahun_ajaran')->distinct()->orderBy('tahun_ajaran', 'desc')->pluck('tahun_ajaran');
 
         return view('admin.siswa.index', [
-            'siswas' => $siswas,
+            'siswas'        => $siswas,
+            'tahunAjarans'  => $tahunAjarans,
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('admin.siswa.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -65,12 +58,6 @@ class SiswaController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Siswa  $siswa
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Siswa $siswa)
     {
         return view('admin.siswa.edit', [
@@ -78,13 +65,6 @@ class SiswaController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Siswa  $siswa
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Siswa $siswa)
     {
         $validated = $request->validate([
@@ -101,12 +81,6 @@ class SiswaController extends Controller
         return redirect()->route('admin.siswa.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Siswa  $siswa
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Siswa $siswa)
     {
         $siswa->delete();
@@ -121,9 +95,12 @@ class SiswaController extends Controller
         $siswas = Siswa::when($search, function ($query, $search) {
                 return $query->where('nama_siswa', 'like', '%' . $search . '%');
         })->simplePaginate(6);
+        $tahunAjarans = Siswa::select('tahun_ajaran')->distinct()->orderBy('tahun_ajaran', 'desc')->pluck('tahun_ajaran');
+
 
         return view('admin.siswa.index', [
-            'siswas' => $siswas,
+            'siswas'        => $siswas,
+            'tahunAjarans'  => $tahunAjarans,
         ]);
     }
 }

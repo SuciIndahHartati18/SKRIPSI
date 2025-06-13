@@ -23,7 +23,7 @@
                         <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">No.</td>
                         <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Nisn</td>
                         <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Nama</td>
-                        <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Tahun Ajaran</td>
+                        <td class="font-bold text-center whitespace-nowrap px-4 py-1" style="border: 1px solid;">Tahun Ajaran</td>
                         <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Alamat</td>
                         <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Jalur</td>
                         <td class="font-bold text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">Keterangan</td>
@@ -31,14 +31,14 @@
                 </thead>
                 <tbody>
                     @foreach ($siswas as $siswa)
-                        <tr>
-                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">{{ $loop->iteration }}</td>
-                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">{{ $siswa->nisn }}</td>
-                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">{{ $siswa->nama_siswa }}</td>
-                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">{{ $siswa->tahun_ajaran }}</td>
-                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">{{ $siswa->alamat }}</td>
-                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;">{{ $siswa->jalur }}</td>
-                            <td class="text-center whitespace-wrap px-4 py-1" style="border: 1px solid;"> - </td>
+                        <tr class="text-sm h-[3rem] align-middle">
+                            <td class="text-center px-4 py-1" style="border: 1px solid;">{{ $loop->iteration }}</td>
+                            <td class="text-center px-4 py-1" style="border: 1px solid;">{{ $siswa->nisn }}</td>
+                            <td class="text-center px-4 py-1" style="border: 1px solid;">{{ $siswa->nama_siswa }}</td>
+                            <td class="text-center px-4 py-1" style="border: 1px solid;">{{ $siswa->tahun_ajaran }}</td>
+                            <td class="text-center px-4 py-1" style="border: 1px solid;">{{ $siswa->alamat }}</td>
+                            <td class="text-center px-4 py-1" style="border: 1px solid;">{{ $siswa->jalur }}</td>
+                            <td class="text-center px-4 py-1" style="border: 1px solid;"> - </td>
                         </tr>
                     @endforeach
                 </tbody>
