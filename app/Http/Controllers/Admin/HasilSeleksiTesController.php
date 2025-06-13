@@ -20,11 +20,6 @@ class HasilSeleksiTesController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
         $siswas = Siswa::has('normalisasiTes')->latest()->get();
@@ -48,24 +43,27 @@ class HasilSeleksiTesController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'siswa_id'          => ['required', 'exists:siswa,id'],
         ]);
+            
+        // Cek apakah siswa dengan nama dan tahun ajaran yang sama sudah ada
+        $siswa          = Siswa::findOrFail($request->siswa_id);
+        $alreadyExists  = HasilSeleksiTes::whereHas('siswa', function ($query) use ($siswa) {
+            $query->where('nama_siswa', $siswa->nama_siswa)
+                ->where('tahun_ajaran', $siswa->tahun_ajaran);
+        })->exists();
+
+        if ($alreadyExists) {
+            return back()->withErrors([
+                'siswa_id' => 'Siswa dengan Nama dan Tahun Ajaran ini sudah memiliki "Hasil Seleksi Prestasi"!'
+            ])->withInput();
+        }
 
         $normalisasiTes = NormalisasiTes::with('kriteriaTes')
             ->where('siswa_id', $request->siswa_id)->get();
-
-        // if ($normalisasiTes->isEmpty()) {
-        //     return back()->with('error', 'Normalisasi prestasi untuk siswa ini tidak tersedia!');
-        // }
 
         // Hitung nilai Akhir dengan SAW
         $nilaiAkhir = 0;

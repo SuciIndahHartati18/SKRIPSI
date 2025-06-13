@@ -17,12 +17,12 @@
             </x-form.select>
         </x-form.container>
 
-        @foreach ($kriteriaTes as $kriteria)
+        @foreach ($kriteriaTes as $index => $kriteria)
             <x-form.container variant="label-input">
-                <x-form.label for="{{ $kriteria->nama_kriteria_tes }}" >{{ $kriteria->nama_kriteria_tes }}</x-form.label>
-                <x-form.input type="hidden" name="kriteria_tes_id[]" id="kriteria_tes_id" :value="old('kriteria_tes_id', $kriteria->id)" placeholder="0"/>
+                <x-form.label for="nilai_tes_{{ $index }}" >{{ $kriteria->nama_kriteria_tes }}</x-form.label>
+                <x-form.input type="hidden" name="kriteria_tes_id[]" :value="$kriteria->id"/>
     
-                <x-form.input type="text" name="nilai_tes[]" id="nilai_tes" :value="old('nilai_tes')" placeholder="0" />
+                <x-form.input type="number" name="nilai_tes[]" id="nilai_tes_{{ $index }}" :value="old('nilai_tes.' . $index)" placeholder="0" min="0" max="100" />
             </x-form.container>
         @endforeach
 
@@ -33,4 +33,14 @@
                 class="bg-blue-500 font-semibold text-slate-100 text-center text-xl px-4 py-1 transition delay-50 duration-300 hover:bg-blue-600">Simpan</button>
         </x-form.container>
     </x-form.form>
+
+    @if ($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded my-4">
+            <ul class="list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 </x-layout-dashboard>

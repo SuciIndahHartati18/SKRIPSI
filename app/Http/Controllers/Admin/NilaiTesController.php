@@ -20,11 +20,6 @@ class NilaiTesController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $siswas     = Siswa::latest()->get();
@@ -36,12 +31,6 @@ class NilaiTesController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $valiadatedData = $request->validate([
@@ -49,8 +38,21 @@ class NilaiTesController extends Controller
             'kriteria_tes_id'   => ['required', 'array'],
             'kriteria_tes_id.*' => ['required', 'exists:kriteria_tes,id'],
             'nilai_tes'         => ['required', 'array'],
-            'nilai_tes.*'       => ['required', 'numeric'],
+            'nilai_tes.*'       => ['required', 'numeric', 'between:0,100'],
         ]);
+
+        // Cek apakah siswa sudah pernah dimasukkan
+        $siswa          = Siswa::findOrFail($valiadatedData['siswa_id']);
+        $alreadyExists  = NilaiTes::whereHas('siswa', function ($query) use ($siswa) {
+            $query->where('nama_siswa', $siswa->nama_siswa)
+                ->where('tahun_ajaran', $siswa->tahun_ajaran);
+        })->exists();
+
+        if ($alreadyExists) {
+            return redirect()->back()
+                ->withErrors(['siswa_id' => 'Nilai tes untuk siswa dengan Nama dan Tahun Ajaran ini sudah dimasukkan!'])
+                ->withInput();
+        }
 
         foreach ($valiadatedData['kriteria_tes_id'] as $index => $kriteriaId) {
             $kriteria   = KriteriaTes::find($kriteriaId);

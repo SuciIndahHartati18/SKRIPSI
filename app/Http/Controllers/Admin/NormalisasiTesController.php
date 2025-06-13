@@ -22,11 +22,6 @@ class NormalisasiTesController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
         $siswas         = Siswa::has('nilaiTes')->latest()->get();
@@ -51,12 +46,6 @@ class NormalisasiTesController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -66,6 +55,19 @@ class NormalisasiTesController extends Controller
         ]);
 
         $siswaId = $validatedData['siswa_id'];
+
+        // Cek apakah siswa dengan nama dan tahun ajaran sudah dimasukkan ke normalisasi
+        $siswa          = Siswa::findOrFail($siswaId);
+        $alreadyExists  = NormalisasiTes::whereHas('siswa', function ($query) use ($siswa) {
+            $query->where('nama_siswa', $siswa->nama_siswa)
+                ->where('tahun_ajaran', $siswa->tahun_ajaran);
+        })->exists();
+
+        if ($alreadyExists) {
+            return redirect()->back()
+                ->withErrors(['siswa_id' => 'Normalisasi untuk siswa dengan Nama dan Tahun Ajaran ini sudah dimasukkan!'])
+                ->withInput();
+        }
 
         DB::beginTransaction();
         try {
