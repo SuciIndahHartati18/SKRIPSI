@@ -60,7 +60,7 @@ class HasilSeleksiTesController extends Controller
 
         if ($alreadyExists) {
             return back()->withErrors([
-                'siswa_id' => 'Siswa dengan Nama dan Tahun Ajaran ini sudah memiliki "Hasil Seleksi Prestasi"!'
+                'siswa_id' => 'Siswa dengan Nama dan Tahun Ajaran ini sudah memiliki "Hasil Seleksi Tes"!'
             ])->withInput();
         }
 
@@ -145,9 +145,7 @@ class HasilSeleksiTesController extends Controller
             $hasilSeleksi = HasilSeleksiTes::with('siswa')
                 ->whereHas('siswa', function ($query) use ($tahunDipilih) {
                     $query->where('tahun_ajaran', $tahunDipilih);
-                })
-                ->orderByDesc('nilai_akhir_tes')
-                ->get();
+                })->orderByDesc('nilai_akhir_tes')->get();
         }
 
         return view('admin.hasil_seleksi_tes.edit-ranking', [
@@ -185,7 +183,7 @@ class HasilSeleksiTesController extends Controller
         ]);
     }
 
-    // Print
+    // Preview
     public function preview()
     {
         $hasilSeleksiTes = HasilSeleksiTes::latest()->get();
@@ -195,6 +193,7 @@ class HasilSeleksiTesController extends Controller
         ]);
     }
 
+    // Print
     public function print(Request $request)
     {
         $request->validate([

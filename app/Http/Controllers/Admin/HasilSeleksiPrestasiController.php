@@ -7,6 +7,7 @@ use App\Models\HasilSeleksiPrestasi;
 use App\Models\NormalisasiPrestasi;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
+use Spatie\Browsershot\Browsershot;
 
 class HasilSeleksiPrestasiController extends Controller
 {
@@ -20,17 +21,12 @@ class HasilSeleksiPrestasiController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
         $siswas = Siswa::has('normalisasiPrestasi')->latest()->get();
 
-        $selectedSiswa          = null;
-        $normalisasiPrestasi    = [];
+        $selectedSiswa      = null;
+        $normalisasiPrestasi= [];
 
         if ($request->filled('siswa_id')) {
             $selectedSiswa = Siswa::find($request->siswa_id);
@@ -48,33 +44,25 @@ class HasilSeleksiPrestasiController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'siswa_id' => ['required', 'exists:siswa,id'],
+        $request->validate([
+            'siswa_id'          => ['required', 'exists:siswa,id'],
         ]);
 
-        $siswa = Siswa::findOrFail($request->siswa_id);
-
         // Cek apakah siswa dengan nama dan tahun ajaran yang sama sudah ada
-        $alreadyExists = HasilSeleksiPrestasi::whereHas('siswa', function ($query) use ($siswa) {
+        $siswa          = Siswa::findOrFail($request->siswa_id);
+        $alreadyExists  = HasilSeleksiPrestasi::whereHas('siswa', function ($query) use ($siswa) {
             $query->where('nama_siswa', $siswa->nama_siswa)
                 ->where('tahun_ajaran', $siswa->tahun_ajaran);
         })->exists();
 
         if ($alreadyExists) {
             return back()->withErrors([
-                'siswa_id' => 'Siswa dengan Nama dan Tahun Ajaran ini sudah memiliki hasil seleksi prestasi!'
+                'siswa_id' => 'Siswa dengan Nama dan Tahun Ajaran ini sudah memiliki "Hasil Seleksi Prestasi"!'
             ])->withInput();
         }
 
-        // Ambil data normalisasi prestasi
         $normalisasiPrestasi = NormalisasiPrestasi::with('kriteriaPrestasi')
             ->where('siswa_id', $request->siswa_id)->get();
 
@@ -86,17 +74,12 @@ class HasilSeleksiPrestasiController extends Controller
             $nilaiAkhir += $nilai * $bobot;
         }
 
-        // Tentukan status kelulusan
-        $statusPrestasi = $nilaiAkhir >= 0.65 ? 'Lulus' : 'Tidak Lulus';
+        HasilSeleksiPrestasi::updateOrCreate([
+            'siswa_id'              => $request->siswa_id,
+            'nilai_akhir_prestasi'  => $nilaiAkhir,
+            'ranking'               => '-', // Bisa diisi nanti saat proses perankingan
+        ]);
 
-        HasilSeleksiPrestasi::updateOrCreate(
-            ['siswa_id' => $request->siswa_id],
-            [
-                'nilai_akhir_prestasi'  => $nilaiAkhir,
-                'status_prestasi'       => $statusPrestasi, 
-            ]
-        );
-        
         return redirect()->route('admin.perhitungan_jalur_prestasi.index');
     }
 
@@ -143,5 +126,100 @@ class HasilSeleksiPrestasiController extends Controller
     public function destroy(HasilSeleksiPrestasi $hasilSeleksiPrestasi)
     {
         //
+    }
+
+    public function editRanking(Request $request)
+    {
+        $tahunAjaran = Siswa::select('tahun_ajaran')->distinct()->pluck('tahun_ajaran');
+
+        // Tahun ajaran yang dipilih dari filter
+        $tahunDipilih = $request->input('tahun_ajaran');
+
+        // Data hasil seleksi (kosong jika belum memilih tahun)
+        $hasilSeleksiPrestasi = collect();
+
+        // Jika user memilih tahun, ambil hasil seleksi berdasarkan siswa yang punya tahun ajaran itu
+        if ($tahunDipilih) {
+            $hasilSeleksiPrestasi = HasilSeleksiPrestasi::with('siswa')
+                ->whereHas('siswa', function ($query) use ($tahunDipilih) {
+                    $query->where('tahun_ajaran', $tahunDipilih);
+                })->orderByDesc('nilai_akhir_prestasi')->get();
+        }
+
+        return view('admin.hasil_seleksi_prestasi.edit-ranking', [
+            'tahunAjaran'           => $tahunAjaran,
+            'tahunDipilih'          => $tahunDipilih,
+            'hasilSeleksiPrestasi'  => $hasilSeleksiPrestasi,
+        ]);
+    }
+
+    public function updateRanking(Request $request)
+    {
+        $request->validate([
+            'tahun_ajaran' => ['required', 'string']
+        ]);
+
+        $tahunAjaran = $request->input('tahun_ajaran');
+
+        // Ambil semua hasil seleksi pretasi yang terhubung dengan siswa tahun ajaran yang dipilih
+        $hasilSeleksiPrestasi = HasilSeleksiPrestasi::with('siswa')
+            ->whereHas('siswa', function ($query) use ($tahunAjaran) {
+                $query->where('tahun_ajaran', $tahunAjaran);
+            })->orderByDesc('nilai_akhir_prestasi')->get();
+
+        // Proses pemberian ranking otomatis
+        $ranking = 1;
+        foreach ($hasilSeleksiPrestasi as $item) {
+            $item->update([
+                'ranking' => $ranking
+            ]);
+            $ranking++;
+        }
+
+        return redirect()->route('admin.perhitungan_jalur_prestasi.index', [
+            'tahun_ajaran' => $tahunAjaran
+        ]);
+    }
+
+    // Preview
+    public function preview()
+    {
+        $hasilSeleksiPrestasi = HasilSeleksiPrestasi::latest()->get();
+
+        return view('cetak.hasil_seleksi_prestasi.print', [
+            'hasilSeleksiPrestasi' => $hasilSeleksiPrestasi,
+        ]);
+    }
+
+    public function print(Request $request)
+    {
+        $request->validate([
+            'tahun_ajaran' => ['required', 'string']
+        ]);
+
+        $tahunAjaran = $request->input('tahun_ajaran');
+
+        // Ambil data hasil seleksi berdasarkan tahun ajaran
+        $hasilSeleksiPrestasi = HasilSeleksiPrestasi::with('siswa')
+            ->whereHas('siswa', function ($query) use ($tahunAjaran) {
+                $query->where('tahun_ajaran', $tahunAjaran);
+            })->orderBy('ranking')->get();
+
+        // Render blade sebagai HTML
+        $html = view('cetak.hasil_seleksi_prestasi.print', [
+            'hasilSeleksiPrestasi'   => $hasilSeleksiPrestasi,
+            'tahunAjaran'       => $tahunAjaran,
+        ])->render();
+
+        // Buat PDF dengan Browsershot
+        $pdf = Browsershot::html($html)
+            ->format('A4')
+            ->margins(10, 0, 10, 0)
+            ->showBackground()
+            ->landscape()
+            ->pdf();
+
+        return response($pdf)
+            ->header('Content-Type', 'application/pdf');
     }
 }

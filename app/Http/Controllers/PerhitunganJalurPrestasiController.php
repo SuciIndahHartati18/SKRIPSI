@@ -7,17 +7,14 @@ use Illuminate\Http\Request;
 
 class PerhitunganJalurPrestasiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $siswas = Siswa::with('nilaiPrestasi.kriteriaPrestasi')->latest()->get();
+        $siswas     = Siswa::with('nilaiPrestasi.kriteriaPrestasi')->latest()->get();
+        $tahunAjaran= Siswa::select('tahun_ajaran')->distinct()->orderBy('tahun_ajaran', 'desc')->pluck('tahun_ajaran');
 
         return view('admin.perhitungan_jalur_prestasi.index', [
-            'siswas'    => $siswas
+            'siswas'        => $siswas,
+            'tahunAjaran'   => $tahunAjaran,
         ]);
     }
 

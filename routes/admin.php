@@ -80,6 +80,11 @@ Route::prefix('admin/')->middleware('auth')->group(function () {
         Route::get('/hasil-seleksi-prestasi', 'index')->name('admin.hasil_seleksi_prestasi.index');
         Route::get('/hasil-seleksi-prestasi/create', 'create')->name('admin.hasil_seleksi_prestasi.create');
         Route::post('/hasil-seleksi-prestasi', 'store')->name('admin.hasil_seleksi_prestasi.store');
+
+        Route::get('/hasil-seleksi-prestasi/edit-ranking', 'editRanking')->name('admin.hasil_seleksi_prestasi.editRanking');
+        Route::put('/hasil-seleksi-prestasi/update-ranking', 'updateRanking')->name('admin.hasil_seleksi_prestasi.updateRanking');
+        Route::get('/hasil-seleksi-prestasi/preview', 'preview')->name('admin.hasil_seleksi_prestasi.preview');
+        Route::get('/hasil-seleksi-prestasi/print', 'print')->name('admin.hasil_seleksi_prestasi.print');
     
         Route::delete('/hasil-seleksi-prestasi/{hasilSeleksiPrestasi}', 'destroy')->name('admin.hasil_seleksi_prestasi.destroy');
     });
