@@ -92,7 +92,11 @@
     <div class="flex flex-col">
         <x-table.container variant="heading">
             <span class="font-semibold text-rose-900 text-2xl">Nilai Normalisasi dengan Algoritma SAW:</span>
-            <x-table.link variant="create" href="{{ route('admin.hasil_seleksi_tes.create') }}">+ Tambah</x-table.link>
+
+            <div class="flex gap-3">
+                <x-table.link variant="create" href="{{ route('admin.hasil_seleksi_tes.create') }}">+ Tambah</x-table.link>
+                <x-table.link variant="create" href="{{ route('admin.hasil_seleksi_tes.editRanking') }}">+ Ranking</x-table.link>
+            </div>
         </x-table.container>
     
         <x-table.container variant="main">
@@ -102,7 +106,8 @@
                         <x-table.tr variant="head">
                             <x-table.td variant="head">No.</x-table.td>
                             <x-table.td variant="head">Nama Perserta</x-table.td>
-                            <x-table.td variant="head">Nilai Akhir</x-table.td>
+                            <x-table.td variant="head">Total Nilai</x-table.td>
+                            <x-table.td variant="head">Ranking</x-table.td>
                         </x-table.tr>
                     </thead>
                     <tbody>
@@ -111,11 +116,27 @@
                                 <x-table.td variant="body">{{ $loop->iteration }}</x-table.td>
                                 <x-table.td variant="body">{{ $siswa->nama_siswa }}</x-table.td>
                                 <x-table.td variant="body">{{ $siswa->hasilSeleksiTes->first()?->nilai_akhir_tes ?? '-' }}</x-table.td>
+                                <x-table.td variant="body">{{ $siswa->hasilSeleksiTes->first()?->ranking ?? '-' }}</x-table.td>
                             </x-table.tr>
                         @endforeach
                     </tbody>
                 </x-table.table>
             </x-table.container>
         </x-table.container>
+
+        <div class="my-3">
+            <form method="GET" action="{{ route('admin.hasil_seleksi_tes.print') }}" target="_blank">
+                <div class="flex justify-end gap-3">
+                    <select name="tahun_ajaran" id="tahun_ajaran" class="text-lg px-4 py-1">
+                        <option value="">Pilih Tahun</option>
+                        @foreach ($tahunAjaran as $tahun)
+                            <option value="{{ $tahun }}">{{ $tahun }}</option>
+                        @endforeach
+                    </select>
+
+                    <button type="submit" class="w-fit bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500">Cetak</button>
+                </div>
+            </form>
+        </div>
     </div>
 </x-layout-dashboard>

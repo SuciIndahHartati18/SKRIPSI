@@ -58,6 +58,7 @@ Route::prefix('admin/')->middleware('auth')->group(function () {
         Route::get('/perhitungan-jalur-tes', 'index')->name('admin.perhitungan_jalur_tes.index');
     });
 
+    /*
     Route::controller(RankingController::class)->group(function () {
         Route::get('/ranking', 'index')->name('admin.ranking.index');
         Route::get('/ranking/create', 'create')->name('admin.ranking.create');
@@ -68,6 +69,7 @@ Route::prefix('admin/')->middleware('auth')->group(function () {
         Route::get('/ranking/update-ranking', 'showUpdateForm')->name('admin.ranking.showUpdateForm');
         Route::post('/ranking/update-ranking', 'updateRanking')->name('admin.ranking.updateRanking');
     });
+    */
 
     Route::controller(AkunController::class)->group(function () {
         Route::get('/akun/{user}/edit', 'edit')->name('admin.akun.edit');
@@ -80,14 +82,6 @@ Route::prefix('admin/')->middleware('auth')->group(function () {
         Route::post('/hasil-seleksi-prestasi', 'store')->name('admin.hasil_seleksi_prestasi.store');
     
         Route::delete('/hasil-seleksi-prestasi/{hasilSeleksiPrestasi}', 'destroy')->name('admin.hasil_seleksi_prestasi.destroy');
-    });
-
-    Route::controller(HasilSeleksiTesController::class)->group(function () {
-        Route::get('/hasil-seleksi-tes', 'index')->name('admin.hasil_seleksi_tes.index');
-        Route::get('/hasil-seleksi-tes/create', 'create')->name('admin.hasil_seleksi_tes.create');
-        Route::post('/hasil-seleksi-tes', 'store')->name('admin.hasil_seleksi_tes.store');
-    
-        Route::delete('/hasil-seleksi-tes/{hasilSeleksiTes}', 'destroy')->name('admin.hasil_seleksi_tes.destroy');
     });
 
     Route::controller(NilaiPrestasiController::class)->group(function () {
@@ -121,5 +115,18 @@ Route::prefix('admin/')->middleware('auth')->group(function () {
         Route::post('/normalisasi-tes', 'store')->name('admin.normalisasi_tes.store');
     
         Route::delete('/normalisasi-tes/{normalisasiTes}', 'destroy')->name('admin.normalisasi_tes.destroy');
+    });
+
+    Route::controller(HasilSeleksiTesController::class)->group(function () {
+        Route::get('/hasil-seleksi-tes', 'index')->name('admin.hasil_seleksi_tes.index');
+        Route::get('/hasil-seleksi-tes/create', 'create')->name('admin.hasil_seleksi_tes.create');
+        Route::post('/hasil-seleksi-tes', 'store')->name('admin.hasil_seleksi_tes.store');
+
+        Route::get('/hasil-seleksi-tes/edit-ranking', 'editRanking')->name('admin.hasil_seleksi_tes.editRanking');
+        Route::put('/hasil-seleksi-tes/update-ranking', 'updateRanking')->name('admin.hasil_seleksi_tes.updateRanking');
+        Route::get('/hasil-seleksi-tes/preview', 'preview')->name('admin.hasil_seleksi_tes.preview');
+        Route::get('/hasil-seleksi-tes/print', 'print')->name('admin.hasil_seleksi_tes.print');
+    
+        Route::delete('/hasil-seleksi-tes/{hasilSeleksiTes}', 'destroy')->name('admin.hasil_seleksi_tes.destroy');
     });
 });

@@ -22,7 +22,7 @@ class SiswaFactory extends Factory
             'alamat'        => fake()->address(),
             'jalur'         => fake()->randomElement(['Prestasi', 'Tes']),
             'jenis_kelamin' => fake()->randomElement(['Laki-laki', 'Perempuan']),
-            'tahun_ajaran'  => fake()->randomElement(['2025', '2024']),
+            'tahun_ajaran'  => fake()->randomElement(['2024/2025', '2025/2026']),
         ];
     }
 }
