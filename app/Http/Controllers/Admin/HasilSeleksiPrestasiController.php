@@ -47,7 +47,7 @@ class HasilSeleksiPrestasiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'siswa_id'          => ['required', 'exists:siswa,id'],
+            'siswa_id' => ['required', 'exists:siswa,id'],
         ]);
 
         // Cek apakah siswa dengan nama dan tahun ajaran yang sama sudah ada
@@ -66,7 +66,7 @@ class HasilSeleksiPrestasiController extends Controller
         $normalisasiPrestasi = NormalisasiPrestasi::with('kriteriaPrestasi')
             ->where('siswa_id', $request->siswa_id)->get();
 
-        // Hitung nilai Akhir dengan SAW
+        // Hitung nilai akhir dengan metode SAW
         $nilaiAkhir = 0;
         foreach ($normalisasiPrestasi as $normalisasi) {
             $nilai      = $normalisasi->nilai_normalisasi_prestasi;
@@ -74,10 +74,21 @@ class HasilSeleksiPrestasiController extends Controller
             $nilaiAkhir += $nilai * $bobot;
         }
 
+        // Tentukan status kelulusan berdasarkan nilai akhir
+        if ($nilaiAkhir >= 0.70 && $nilaiAkhir <= 1.00) {
+            $statusPrestasi = 'Lulus';
+        } elseif ($nilaiAkhir >= 0.00 && $nilaiAkhir < 0.70) {
+            $statusPrestasi = 'Tidak lulus';
+        } else {
+            $statusPrestasi = 'Nilai Tidak Valid';
+        }
+
         HasilSeleksiPrestasi::updateOrCreate([
-            'siswa_id'              => $request->siswa_id,
-            'nilai_akhir_prestasi'  => $nilaiAkhir,
-            'ranking'               => '-', // Bisa diisi nanti saat proses perankingan
+            'siswa_id' => $request->siswa_id,
+        ], [
+            'nilai_akhir_prestasi' => $nilaiAkhir,
+            'ranking'              => '-', // Bisa diisi nanti
+            'status_prestasi'      => $statusPrestasi,
         ]);
 
         return redirect()->route('admin.perhitungan_jalur_prestasi.index');
@@ -194,29 +205,34 @@ class HasilSeleksiPrestasiController extends Controller
     // Print
     public function print(Request $request)
     {
+        // Validasi: kedua input wajib diisi
         $request->validate([
-            'tahun_ajaran' => ['required', 'string']
+            'tahun_ajaran'     => ['required', 'string'],
+            'status_prestasi'  => ['required', 'in:Lulus,Tidak lulus'],
+        ], [
+            'tahun_ajaran.required'     => 'Tahun ajaran wajib dipilih.',
+            'status_prestasi.required'  => 'Status prestasi wajib dipilih.',
+            'status_prestasi.in'        => 'Status prestasi tidak valid.',
         ]);
 
-        $tahunAjaran = $request->input('tahun_ajaran');
+        $tahunAjaran     = $request->input('tahun_ajaran');
+        $statusPrestasi  = $request->input('status_prestasi');
 
-        // Ambil data hasil seleksi berdasarkan tahun ajaran
+        // Ambil data hasil seleksi berdasarkan filter tahun dan status
         $hasilSeleksiPrestasi = HasilSeleksiPrestasi::with('siswa')
+            ->where('status_prestasi', $statusPrestasi)
             ->whereHas('siswa', function ($query) use ($tahunAjaran) {
                 $query->where('tahun_ajaran', $tahunAjaran);
-            })
-            ->orderBy('ranking')
-            ->get();
+            })->orderBy('ranking')->get();
 
-        // Render blade sebagai HTML
         $html = view('cetak.hasil_seleksi_prestasi.print', [
             'hasilSeleksiPrestasi' => $hasilSeleksiPrestasi,
-            'tahunAjaran' => $tahunAjaran,
+            'tahunAjaran'          => $tahunAjaran,
+            'statusPrestasi'       => $statusPrestasi,
         ])->render();
 
         $filePath = public_path('hasil_seleksi_prestasi.pdf');
 
-        // Buat PDF dengan Browsershot dan simpan ke file
         Browsershot::html($html)
             ->format('A4')
             ->margins(10, 0, 10, 0)
@@ -225,7 +241,6 @@ class HasilSeleksiPrestasiController extends Controller
             ->noSandbox()
             ->save($filePath);
 
-        // Kirim file untuk di-download lalu hapus setelah selesai
         return response()->download($filePath)->deleteFileAfterSend(true);
     }
 

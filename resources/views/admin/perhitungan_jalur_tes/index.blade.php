@@ -107,6 +107,7 @@
                             <x-table.td variant="head">No.</x-table.td>
                             <x-table.td variant="head">Nama Perserta</x-table.td>
                             <x-table.td variant="head">Total Nilai</x-table.td>
+                            <x-table.td variant="head">Status</x-table.td>
                             <x-table.td variant="head">Ranking</x-table.td>
                         </x-table.tr>
                     </thead>
@@ -116,6 +117,7 @@
                                 <x-table.td variant="body">{{ $loop->iteration }}</x-table.td>
                                 <x-table.td variant="body">{{ $siswa->nama_siswa }}</x-table.td>
                                 <x-table.td variant="body">{{ $siswa->hasilSeleksiTes->first()?->nilai_akhir_tes ?? '-' }}</x-table.td>
+                                <x-table.td variant="body">{{ $siswa->hasilSeleksiTes->first()?->status_tes ?? '-' }}</x-table.td>
                                 <x-table.td variant="body">{{ $siswa->hasilSeleksiTes->first()?->ranking ?? '-' }}</x-table.td>
                             </x-table.tr>
                         @endforeach
@@ -132,6 +134,12 @@
                         @foreach ($tahunAjaran as $tahun)
                             <option value="{{ $tahun }}">{{ $tahun }}</option>
                         @endforeach
+                    </select>
+
+                    <select name="status_tes" id="status_tes" class="text-lg px-4 py-1">
+                        <option value="">Pilih Status</option>
+                        <option value="Lulus" {{ request('status_tes') == 'Lulus' ? 'selected' : '' }}>Lulus</option>
+                        <option value="Tidak lulus" {{ request('status_tes') == 'Tidak lulus' ? 'selected' : '' }}>Tidak lulus</option>
                     </select>
 
                     <button type="submit" class="w-fit bg-rose-900 font-bold text-slate-100 text-xl px-3 py-1 transition delay-50 duration-200 hover:bg-rose-500">Cetak</button>

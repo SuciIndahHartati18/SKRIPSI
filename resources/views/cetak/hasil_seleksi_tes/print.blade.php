@@ -25,7 +25,7 @@
             <span class="w-full" style="border: 1px solid;"></span>
             
             <div class="flex flex-col">
-                <span class="font-bold text-center text-2xl">Hasil Seleksi Jalur Tes</span>
+                <span class="font-bold text-center text-2xl">Hasil Seleksi Jalur Tes ({{ strtoupper($statusTes ?? '-') }})</span>
                 <span class="font-bold text-center text-2xl">Tahun Ajaran {{ $tahunAjaran ?? 'Semua' }}</span>
             </div>
 

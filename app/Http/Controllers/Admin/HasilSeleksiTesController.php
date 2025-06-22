@@ -48,12 +48,12 @@ class HasilSeleksiTesController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'siswa_id'          => ['required', 'exists:siswa,id'],
+            'siswa_id' => ['required', 'exists:siswa,id'],
         ]);
 
         // Cek apakah siswa dengan nama dan tahun ajaran yang sama sudah ada
-        $siswa          = Siswa::findOrFail($request->siswa_id);
-        $alreadyExists  = HasilSeleksiTes::whereHas('siswa', function ($query) use ($siswa) {
+        $siswa = Siswa::findOrFail($request->siswa_id);
+        $alreadyExists = HasilSeleksiTes::whereHas('siswa', function ($query) use ($siswa) {
             $query->where('nama_siswa', $siswa->nama_siswa)
                 ->where('tahun_ajaran', $siswa->tahun_ajaran);
         })->exists();
@@ -67,22 +67,35 @@ class HasilSeleksiTesController extends Controller
         $normalisasiTes = NormalisasiTes::with('kriteriaTes')
             ->where('siswa_id', $request->siswa_id)->get();
 
-        // Hitung nilai Akhir dengan SAW
+        // Hitung nilai akhir dengan metode SAW
         $nilaiAkhir = 0;
         foreach ($normalisasiTes as $normalisasi) {
-            $nilai      = $normalisasi->nilai_normalisasi_tes;
-            $bobot      = $normalisasi->kriteriaTes->bobot_kriteria_tes;
+            $nilai = $normalisasi->nilai_normalisasi_tes;
+            $bobot = $normalisasi->kriteriaTes->bobot_kriteria_tes;
             $nilaiAkhir += $nilai * $bobot;
         }
 
+        // Tentukan status kelulusan berdasarkan nilai akhir
+        if ($nilaiAkhir >= 0.70 && $nilaiAkhir <= 1.00) {
+            $statusTes = 'Lulus';
+        } elseif ($nilaiAkhir >= 0.00 && $nilaiAkhir < 0.70) {
+            $statusTes = 'Tidak Lulus';
+        } else {
+            $statusTes = 'Nilai Tidak Valid'; // Untuk pengamanan jika hasil tidak masuk akal
+        }
+
+        // Simpan hasil seleksi tes
         HasilSeleksiTes::updateOrCreate([
-            'siswa_id'          => $request->siswa_id,
-            'nilai_akhir_tes'   => $nilaiAkhir,
-            'ranking'           => '-', // Bisa diisi nanti saat proses perankingan
+            'siswa_id' => $request->siswa_id,
+        ], [
+            'nilai_akhir_tes' => $nilaiAkhir,
+            'ranking'         => '-', // Bisa diisi nanti saat proses perankingan
+            'status_tes'      => $statusTes, // Simpan status kelulusan
         ]);
 
         return redirect()->route('admin.perhitungan_jalur_tes.index');
     }
+
 
     /**
      * Display the specified resource.
@@ -196,29 +209,38 @@ class HasilSeleksiTesController extends Controller
     // Print
     public function print(Request $request)
     {
+        // Validasi input
         $request->validate([
-            'tahun_ajaran' => ['required', 'string']
+            'tahun_ajaran' => ['required', 'string'],
+            'status_tes'   => ['required', 'in:Lulus,Tidak lulus'],
+        ], [
+            'tahun_ajaran.required' => 'Tahun ajaran wajib dipilih.',
+            'status_tes.required'   => 'Status tes wajib dipilih.',
+            'status_tes.in'         => 'Status tes tidak valid.',
         ]);
 
         $tahunAjaran = $request->input('tahun_ajaran');
+        $statusTes   = $request->input('status_tes');
 
-        // Ambil data hasil seleksi berdasarkan tahun ajaran
+        // Ambil data hasil seleksi berdasarkan filter tahun ajaran dan status tes
         $hasilSeleksiTes = HasilSeleksiTes::with('siswa')
+            ->where('status_tes', $statusTes)
             ->whereHas('siswa', function ($query) use ($tahunAjaran) {
                 $query->where('tahun_ajaran', $tahunAjaran);
             })
             ->orderBy('ranking')
             ->get();
 
-        // Render blade sebagai HTML
+        // Render Blade jadi HTML
         $html = view('cetak.hasil_seleksi_tes.print', [
             'hasilSeleksiTes' => $hasilSeleksiTes,
-            'tahunAjaran' => $tahunAjaran,
+            'tahunAjaran'     => $tahunAjaran,
+            'statusTes'       => $statusTes,
         ])->render();
 
         $filePath = public_path('hasil_seleksi_tes.pdf');
 
-        // Buat PDF dengan Browsershot dan simpan ke file
+        // Buat PDF dengan Browsershot
         Browsershot::html($html)
             ->format('A4')
             ->margins(10, 0, 10, 0)
@@ -227,7 +249,8 @@ class HasilSeleksiTesController extends Controller
             ->noSandbox()
             ->save($filePath);
 
-        // Kirim file untuk didownload lalu hapus setelah selesai
+        // Kirim PDF ke user
         return response()->download($filePath)->deleteFileAfterSend(true);
     }
+
 }

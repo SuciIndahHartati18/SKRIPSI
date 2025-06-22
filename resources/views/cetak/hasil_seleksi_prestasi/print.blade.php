@@ -1,7 +1,7 @@
 <x-layout-print>
 
     <div class="flex flex-col">
-        <span class="font-bold text-center text-2xl">Hasil Seleksi Jalur Prestasi</span>
+        <span class="font-bold text-center text-2xl">Hasil Seleksi Jalur Prestasi ({{ strtoupper($statusPrestasi ?? '-') }})</span>
         <span class="font-bold text-center text-2xl">Tahun Ajaran {{ $tahunAjaran ?? 'Semua' }}</span>
     </div>
 

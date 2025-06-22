@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Siswa::class)->constrained('siswa')->cascadeOnDelete();
             $table->decimal('nilai_akhir_prestasi', 10,2);
             $table->string('ranking');
-            // $table->enum('status_prestasi', ['Lulus', 'Tidak lulus'])->default('Tidak lulus');
+            $table->enum('status_prestasi', ['Lulus', 'Tidak lulus', 'Nilai Tidak Valid'])->default('Nilai Tidak Valid');
             $table->timestamps();
         });
     }
