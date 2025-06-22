@@ -33,15 +33,6 @@
         </x-form.container>
 
         <x-form.container variant="label-input">
-            <x-form.label for="jalur">Jalur</x-form.label>
-            <x-form.select name="jalur" id="jalur">
-                <option value="Prestasi" {{ old('jalur', $siswa->jalur) === 'Prestasi' ? 'selected' : '' }}>Prestasi</option>
-                <option value="Tes" {{ old('jalur', $siswa->jalur) === 'Tes' ? 'selected' : '' }}>Tes</option>
-            </x-form.select>
-            <x-form.error errorFor="jalur" />
-        </x-form.container>
-
-        <x-form.container variant="label-input">
             <x-form.label for="jenis_kelamin">Jenis Kelamin</x-form.label>
             <x-form.select name="jenis_kelamin" id="jenis_kelamin">
                 <option value="Laki-laki" {{ old('jenis_kelamin', $siswa->jenis_kelamin) === 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>

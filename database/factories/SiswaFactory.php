@@ -20,7 +20,6 @@ class SiswaFactory extends Factory
             'nisn'          => fake()->numberBetween(10000000000, 9999999999),
             'nama_siswa'    => fake()->name(),
             'alamat'        => fake()->address(),
-            'jalur'         => fake()->randomElement(['Prestasi', 'Tes']),
             'jenis_kelamin' => fake()->randomElement(['Laki-laki', 'Perempuan']),
             'tahun_ajaran'  => fake()->randomElement(['2024/2025', '2025/2026']),
         ];

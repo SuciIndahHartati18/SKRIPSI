@@ -18,7 +18,7 @@
 
         <x-form.container variant="label-input">
             <x-form.label for="tahun_ajaran">Tahun Ajaran</x-form.label>
-            <x-form.input type="text" name="tahun_ajaran" id="tahun_ajaran" :value="old('tahun_ajaran')" placeholder="20XX"/>
+            <x-form.input type="text" name="tahun_ajaran" id="tahun_ajaran" :value="old('tahun_ajaran')" placeholder="20XX/20XX"/>
             <x-form.error errorFor="tahun_ajaran" />
         </x-form.container>
 
@@ -28,15 +28,6 @@
                 {{ old('alamat') }}
             </x-form.textarea>
             <x-form.error errorFor="alamat" />
-        </x-form.container>
-
-        <x-form.container variant="label-input">
-            <x-form.label for="jalur">Jalur</x-form.label>
-            <x-form.select name="jalur" id="jalur">
-                <option value="Prestasi" {{ old('jalur') === 'Prestasi' ? 'selected' : '' }}>Prestasi</option>
-                <option value="Tes" {{ old('jalur') === 'Tes' ? 'selected' : '' }}>Tes</option>
-            </x-form.select>
-            <x-form.error errorFor="jalur" />
         </x-form.container>
 
         <x-form.container variant="label-input">

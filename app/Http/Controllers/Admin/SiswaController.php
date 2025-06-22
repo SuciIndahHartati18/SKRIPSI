@@ -38,7 +38,6 @@ class SiswaController extends Controller
             'nama_siswa'    => ['required'],
             'tahun_ajaran'  => ['required'],
             'alamat'        => ['required'],
-            'jalur'         => ['required'],
             'jenis_kelamin' => ['required', 'in:Laki-laki,Perempuan'],
         ]);
 
@@ -72,7 +71,6 @@ class SiswaController extends Controller
             'nama_siswa'    => ['required'],
             'tahun_ajaran'  => ['required'],
             'alamat'        => ['required'],
-            'jalur'         => ['required'],
             'jenis_kelamin' => ['required', 'in:Laki-laki,Perempuan'],
         ]);
 

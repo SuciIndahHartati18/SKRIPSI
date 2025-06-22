@@ -29,7 +29,7 @@ class SiswaController extends Controller
 
         $html = view('cetak.siswa.print', ['siswas' => $siswas])->render();
 
-        $path = public_path('hasil.pdf');
+        $path = public_path('Siswa.pdf');
 
         Browsershot::html($html)
             ->format('A4')

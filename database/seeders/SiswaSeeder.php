@@ -15,6 +15,16 @@ class SiswaSeeder extends Seeder
      */
     public function run()
     {
-        Siswa::factory(10)->create();
+        collect([
+            ['721398123', 'Ellie Rice', '2025/2024', 'Raccoon City', 'Perempuan'],
+        ])->each(function ($item) {
+            Siswa::factory()->create([
+                'nisn'          => $item[0],
+                'nama_siswa'    => $item[1],
+                'tahun_ajaran'  => $item[2],
+                'alamat'        => $item[3],
+                'jenis_kelamin' => $item[4],
+            ]);
+        });
     }
 }
