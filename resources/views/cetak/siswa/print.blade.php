@@ -46,7 +46,7 @@
         </div>
         
         <div class="w-full flex justify-end">
-            <div class="w-1/5 flex flex-col justify-between">
+            <div class="w-1/3 flex flex-col justify-between">
                 <div class="flex flex-col text-center px-4">
                     <span>Jorong, {{ \Carbon\Carbon::now()->translatedFormat('l d-F-Y') }}</span>
                     <span>Kepala Sekolah</span>
