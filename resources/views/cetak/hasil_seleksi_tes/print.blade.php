@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>MTS Manhajussalam Jorong</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -52,12 +52,14 @@
             </table>
         </div>
 
-        <div class="w-full h-32 flex justify-end">
-            <div class="w-1/6 flex flex-col justify-between">
-                <div class="flex flex-col px-4">
-                    <span>Jorong,</span>
+        <div class="w-full flex justify-end">
+            <div class="w-1/5 flex flex-col justify-between">
+                <div class="flex flex-col text-center px-4">
+                    <span>Jorong, {{ \Carbon\Carbon::now()->translatedFormat('l d-F-Y') }}</span>
                     <span>Kepala Sekolah</span>
                 </div>
+
+                <br><br><br><br>
 
                 <span class="w-full" style="border: 1px solid;"></span>
             </div>

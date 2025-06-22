@@ -9,7 +9,7 @@ class PerhitunganJalurTesController extends Controller
 {
     public function index()
     {
-        $siswas     = Siswa::with('nilaiTes.kriteriaTes')->get();
+        $siswas     = Siswa::with('nilaiTes.kriteriaTes')->latest()->get();
         $tahunAjaran= Siswa::select('tahun_ajaran')->distinct()->orderBy('tahun_ajaran', 'desc')->pluck('tahun_ajaran');
 
         return view('admin.perhitungan_jalur_tes.index', [

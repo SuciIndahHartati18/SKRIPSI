@@ -24,7 +24,10 @@
         
                     <div class="flex gap-3 w-full">
                         <label for="password" class="w-1/4 font-semibold text-slate-700 text-xl px-3">Password</label>
-                        <input type="password" name="password" id="password" placeholder="Password..." class="w-full bg-slate-100 px-3 py-1">
+                        <div class="w-full flex flex-col gap-1">
+                            <input type="password" name="password" id="password" placeholder="Password..." class="w-full bg-slate-100 px-3 py-1">
+                            <span class="italic text-red-500 text-sm">( Password minimal 8! )</span>
+                        </div>
                     </div>
         
                     <div class="flex gap-3 w-full">
