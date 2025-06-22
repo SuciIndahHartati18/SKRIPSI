@@ -191,6 +191,7 @@ class HasilSeleksiPrestasiController extends Controller
         ]);
     }
 
+    // Print
     public function print(Request $request)
     {
         $request->validate([
@@ -203,23 +204,29 @@ class HasilSeleksiPrestasiController extends Controller
         $hasilSeleksiPrestasi = HasilSeleksiPrestasi::with('siswa')
             ->whereHas('siswa', function ($query) use ($tahunAjaran) {
                 $query->where('tahun_ajaran', $tahunAjaran);
-            })->orderBy('ranking')->get();
+            })
+            ->orderBy('ranking')
+            ->get();
 
         // Render blade sebagai HTML
         $html = view('cetak.hasil_seleksi_prestasi.print', [
-            'hasilSeleksiPrestasi'   => $hasilSeleksiPrestasi,
-            'tahunAjaran'       => $tahunAjaran,
+            'hasilSeleksiPrestasi' => $hasilSeleksiPrestasi,
+            'tahunAjaran' => $tahunAjaran,
         ])->render();
 
-        // Buat PDF dengan Browsershot
-        $pdf = Browsershot::html($html)
+        $filePath = public_path('hasil_seleksi_prestasi.pdf');
+
+        // Buat PDF dengan Browsershot dan simpan ke file
+        Browsershot::html($html)
             ->format('A4')
             ->margins(10, 0, 10, 0)
             ->showBackground()
             ->landscape()
-            ->pdf();
+            ->noSandbox()
+            ->save($filePath);
 
-        return response($pdf)
-            ->header('Content-Type', 'application/pdf');
+        // Kirim file untuk di-download lalu hapus setelah selesai
+        return response()->download($filePath)->deleteFileAfterSend(true);
     }
+
 }

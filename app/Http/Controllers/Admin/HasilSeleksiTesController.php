@@ -50,7 +50,7 @@ class HasilSeleksiTesController extends Controller
         $validatedData = $request->validate([
             'siswa_id'          => ['required', 'exists:siswa,id'],
         ]);
-            
+
         // Cek apakah siswa dengan nama dan tahun ajaran yang sama sudah ada
         $siswa          = Siswa::findOrFail($request->siswa_id);
         $alreadyExists  = HasilSeleksiTes::whereHas('siswa', function ($query) use ($siswa) {
@@ -206,23 +206,28 @@ class HasilSeleksiTesController extends Controller
         $hasilSeleksiTes = HasilSeleksiTes::with('siswa')
             ->whereHas('siswa', function ($query) use ($tahunAjaran) {
                 $query->where('tahun_ajaran', $tahunAjaran);
-            })->orderBy('ranking')->get();
+            })
+            ->orderBy('ranking')
+            ->get();
 
         // Render blade sebagai HTML
         $html = view('cetak.hasil_seleksi_tes.print', [
-            'hasilSeleksiTes'   => $hasilSeleksiTes,
-            'tahunAjaran'       => $tahunAjaran,
+            'hasilSeleksiTes' => $hasilSeleksiTes,
+            'tahunAjaran' => $tahunAjaran,
         ])->render();
 
-        // Buat PDF dengan Browsershot
-        $pdf = Browsershot::html($html)
+        $filePath = public_path('hasil_seleksi_tes.pdf');
+
+        // Buat PDF dengan Browsershot dan simpan ke file
+        Browsershot::html($html)
             ->format('A4')
             ->margins(10, 0, 10, 0)
             ->showBackground()
             ->landscape()
-            ->pdf();
+            ->noSandbox()
+            ->save($filePath);
 
-        return response($pdf)
-            ->header('Content-Type', 'application/pdf');
+        // Kirim file untuk didownload lalu hapus setelah selesai
+        return response()->download($filePath)->deleteFileAfterSend(true);
     }
 }

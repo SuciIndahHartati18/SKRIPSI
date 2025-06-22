@@ -22,6 +22,28 @@ class SiswaController extends Controller
     public function printPdf(Request $request)
     {
         // Filter siswa berdasarkan tahun ajaran
+        $tahunAjaran = $request->input('tahun_ajaran');
+        $siswas = Siswa::when($tahunAjaran, function ($query) use ($tahunAjaran) {
+            return $query->where('tahun_ajaran', $tahunAjaran);
+        })->get();
+
+        $html = view('cetak.siswa.print', ['siswas' => $siswas])->render();
+
+        $path = public_path('hasil.pdf');
+
+        Browsershot::html($html)
+            ->format('A4')
+            ->landscape()
+            ->margins(10, 0, 10, 0)
+            ->showBackground()
+            ->noSandbox()
+            ->save($path);
+
+        // Berikan respons download file PDF
+        return response()->download($path)->deleteFileAfterSend(true);
+
+
+        /*  
         $tahunAjaran= $request->input('tahun_ajaran');
         $siswas     = Siswa::when($tahunAjaran, function ($query) use ($tahunAjaran) {
             return $query->where('tahun_ajaran', $tahunAjaran);
@@ -31,14 +53,16 @@ class SiswaController extends Controller
             'siswas' => $siswas,
         ])->render();
 
-        $pdf = Browsershot::html($html)
+        Browsershot::html($html)
             ->format('A4')
             ->landscape()
             ->margins(10, 0, 10, 0)
             ->showBackground()
-            ->pdf();
+            ->noSandbox()
+            ->save(public_path('hasil.pdf'));
         
         return response($pdf)
             ->header('Content-Type', 'application/pdf');
+        */
     }
 }
